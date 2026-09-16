@@ -12,6 +12,16 @@ enum MorphTypography {
     static var lineHeight: CGFloat { uiFont.lineHeight }
 }
 
+extension MorphAxis {
+    var vector: (x: CGFloat, y: CGFloat, z: CGFloat) {
+        switch self {
+        case .x: return (1, 0, 0)
+        case .y: return (0, 1, 0)
+        case .z: return (0, 0, 1)
+        }
+    }
+}
+
 /// Horizontal position of every character of a single-line string.
 struct GlyphRun {
     let characters: [Character]
@@ -37,13 +47,13 @@ struct GlyphRun {
     func center(of index: Int) -> CGFloat { (offsets[index] + offsets[index + 1]) / 2 }
 }
 
-/// Everything both engines need for one transition, measured once when the text changes.
+/// Everything the engines need for one transition, measured once when the text changes.
 struct MorphPlan {
     struct Placed {
         let id: Int
         let character: Character
         let x: CGFloat
-        /// Index in its own string; drives the left-to-right delay of the stagger engine.
+        /// Index in its own string; drives the left-to-right wave.
         let order: Int
     }
 
@@ -54,11 +64,11 @@ struct MorphPlan {
         let toX: CGFloat
     }
 
-    /// Characters shared by both strings, used by the diff engine.
+    /// Characters shared by both names, used by the diff engine.
     let moved: [Travelling]
     let removed: [Placed]
     let inserted: [Placed]
-    /// Every visible character of each string, used by the stagger engine.
+    /// Every visible character of each name, used by every other engine.
     let outgoing: [Placed]
     let incoming: [Placed]
     let size: CGSize
@@ -68,7 +78,7 @@ struct MorphPlan {
         let after = GlyphRun(new)
         let width = max(before.width, after.width)
         size = CGSize(width: width, height: MorphTypography.lineHeight)
-        // Both strings stay centred in a box wide enough for either of them.
+        // Both names stay centred in a box wide enough for either of them.
         let beforeOrigin = (width - before.width) / 2
         let afterOrigin = (width - after.width) / 2
 
@@ -123,88 +133,78 @@ struct MorphStage: View, Animatable {
 
     var body: some View {
         ZStack {
-            if style == .stagger {
-                staggerGlyphs
+            if style.usesPairing {
+                pairedGlyphs
             } else {
-                diffGlyphs
+                replacedGlyphs
             }
         }
         .frame(width: plan.size.width, height: plan.size.height)
     }
 
-    // MARK: Diff
-
-    @ViewBuilder private var diffGlyphs: some View {
-        // Departures clear the way before arrivals land, with a short overlap in the middle.
-        let leaving = clamp(progress / 0.4)
-        let arriving = clamp((progress - 0.3) / 0.7)
+    /// The diff engine: shared characters travel, and departures clear the way before arrivals
+    /// land, with a short overlap in the middle.
+    @ViewBuilder private var pairedGlyphs: some View {
         // Reduce Motion keeps the shared characters where they end up and only cross-fades.
         let travel = reduceMotion ? 1 : progress
         ForEach(plan.moved, id: \.id) { item in
-            diffGlyph(item.character, x: lerp(item.fromX, item.toX, travel), opacity: 1, scale: 1)
+            glyph(item.character, x: lerp(item.fromX, item.toX, travel), look: GlyphAppearance())
         }
         ForEach(plan.removed, id: \.id) { item in
-            diffGlyph(item.character, x: item.x,
-                      opacity: 1 - leaving, scale: 1 - 0.22 * leaving * motion)
+            glyph(item.character, x: item.x, look: style.leaving(clamp(progress / 0.4)))
         }
         ForEach(plan.inserted, id: \.id) { item in
-            diffGlyph(item.character, x: item.x,
-                      opacity: arriving, scale: 1 - 0.22 * (1 - arriving) * motion)
+            glyph(item.character, x: item.x,
+                  look: style.arriving(clamp((progress - 0.3) / 0.7), seed: item.order))
         }
     }
 
-    private func diffGlyph(_ character: Character, x: CGFloat, opacity: Double, scale: Double) -> some View {
-        Text(String(character))
-            .font(MorphTypography.font)
-            .foregroundStyle(color)
-            .fixedSize()
-            .scaleEffect(CGFloat(scale))
-            .opacity(opacity)
-            .position(x: x, y: plan.size.height / 2)
-    }
-
-    // MARK: Stagger
-
-    @ViewBuilder private var staggerGlyphs: some View {
+    /// Every other engine: the whole old name leaves and the whole new name arrives.
+    @ViewBuilder private var replacedGlyphs: some View {
         ForEach(plan.outgoing, id: \.id) { item in
-            let step = staggered(item.order, count: plan.outgoing.count)
-            staggerGlyph(item.character, x: item.x, opacity: 1 - step,
-                         scale: 1 - 0.1 * step * motion,
-                         blur: 3 * step * motion, dy: -10 * step * motion)
+            glyph(item.character, x: item.x,
+                  look: style.leaving(wave(item.order, count: plan.outgoing.count)))
         }
         ForEach(plan.incoming, id: \.id) { item in
-            let step = staggered(item.order, count: plan.incoming.count)
-            staggerGlyph(item.character, x: item.x, opacity: step,
-                         scale: 1 - 0.1 * (1 - step) * motion,
-                         blur: 3 * (1 - step) * motion, dy: 10 * (1 - step) * motion)
+            glyph(item.character, x: item.x,
+                  look: style.arriving(wave(item.order, count: plan.incoming.count), seed: item.order))
         }
     }
 
-    private func staggerGlyph(_ character: Character, x: CGFloat, opacity: Double,
-                              scale: Double, blur: Double, dy: Double) -> some View {
-        Text(String(character))
+    private func glyph(_ character: Character, x: CGFloat, look: GlyphAppearance) -> some View {
+        let shown = calm(look)
+        return Text(String(shown.substitute ?? character))
             .font(MorphTypography.font)
             .foregroundStyle(color)
             .fixedSize()
-            .scaleEffect(CGFloat(scale))
-            .blur(radius: CGFloat(blur))
-            .opacity(opacity)
-            .position(x: x, y: plan.size.height / 2 + CGFloat(dy))
+            .scaleEffect(CGFloat(shown.scale))
+            .rotation3DEffect(.degrees(shown.rotation), axis: shown.axis.vector)
+            .blur(radius: CGFloat(shown.blur))
+            .opacity(shown.opacity)
+            .position(x: x + CGFloat(shown.dx), y: plan.size.height / 2 + CGFloat(shown.dy))
     }
 
-    /// Local progress of one character: the wave crosses the line over the first half of the
+    /// Reduce Motion drops every moving part of an effect and leaves the cross-fade.
+    private func calm(_ look: GlyphAppearance) -> GlyphAppearance {
+        guard reduceMotion else { return look }
+        var quiet = look
+        quiet.scale = 1
+        quiet.dx = 0
+        quiet.dy = 0
+        quiet.blur = 0
+        quiet.rotation = 0
+        return quiet
+    }
+
+    /// Local progress of one character. The wave crosses the line over the first `spread` of the
     /// timeline, and every character still reaches 1 exactly when the transition ends.
-    private func staggered(_ order: Int, count: Int) -> Double {
-        guard !reduceMotion, count > 1 else { return clamp(progress) }
-        let spread = 0.5
+    private func wave(_ order: Int, count: Int) -> Double {
+        let spread = style.spread
+        guard !reduceMotion, spread > 0, count > 1 else { return clamp(progress) }
         let start = spread * Double(order) / Double(count - 1)
         return clamp((progress - start) / (1 - spread))
     }
 
-    // MARK: Helpers
-
-    /// Scales the decorative part of each effect down to nothing under Reduce Motion.
-    private var motion: Double { reduceMotion ? 0 : 1 }
     private func clamp(_ value: Double) -> Double { min(max(value, 0), 1) }
     private func lerp(_ from: CGFloat, _ to: CGFloat, _ amount: Double) -> CGFloat {
         from + (to - from) * CGFloat(amount)
@@ -215,43 +215,29 @@ struct MorphStage: View, Animatable {
 struct MorphingTitle: View {
     let text: String
     let style: MorphStyle
-    var identifier = "morphTitle"
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var displayed: String
     @State private var plan: MorphPlan
     @State private var progress: Double
 
-    init(text: String, style: MorphStyle, identifier: String = "morphTitle") {
+    init(text: String, style: MorphStyle) {
         self.text = text
         self.style = style
-        self.identifier = identifier
         _displayed = State(initialValue: text)
         _plan = State(initialValue: MorphPlan(from: text, to: text))
         _progress = State(initialValue: 1)
     }
 
     var body: some View {
-        content
+        MorphStage(progress: progress, plan: plan, style: style,
+                   reduceMotion: reduceMotion, color: Color("CardTitle"))
             .frame(height: MorphTypography.lineHeight)
             .accessibilityElement(children: .ignore)
             .accessibilityLabel(text)
-            .accessibilityIdentifier(identifier)
+            .accessibilityIdentifier("morphTitle")
             .onChange(of: text) { _, updated in retarget(to: updated) }
             .onChange(of: style) { _, _ in settle() }
-    }
-
-    @ViewBuilder private var content: some View {
-        if style == .native {
-            Text(text)
-                .font(MorphTypography.font)
-                .foregroundStyle(Color("CardTitle"))
-                .contentTransition(.interpolate)
-                .animation(animation, value: text)
-        } else {
-            MorphStage(progress: progress, plan: plan, style: style,
-                       reduceMotion: reduceMotion, color: Color("CardTitle"))
-        }
     }
 
     private var animation: Animation {
@@ -275,7 +261,7 @@ struct MorphingTitle: View {
         }
     }
 
-    /// Switching technique is not a transition: show the current text at rest right away.
+    /// Switching technique is not a transition: show the current name at rest right away.
     private func settle() {
         var instant = Transaction()
         instant.disablesAnimations = true

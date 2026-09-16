@@ -8,9 +8,10 @@
 - Accessibility actions, Reduce Motion, safe-area layout and bounded card sizing.
 - Xcode project, shared scheme, numerical physics checks and UI test.
 - Settings screen behind a gear button on the account screen: a four-name slider that morphs the
-  name in place on swipe, a segmented switch between the three candidate techniques (native
-  `contentTransition`, character diff, staggered per-character) and a compare mode that runs all
-  three from one swipe. AnimateText's model is reproduced locally; no package was added.
+  name in place on swipe and a chip row switching between eleven techniques, each modelled on one
+  of the surveyed projects (textmorph-ios, AnimateText, LTMorphingLabel, ZCAnimatedLabel,
+  SwiftUI-Text-Animation-Library, TOMSMorphingLabel). All reproduced locally; no package was added.
+  Every engine is a `GlyphAppearance` over a local progress, so adding one is arithmetic.
 
 ## Verification
 - Xcode 26.6: build-for-testing passed for iOS Simulator.
@@ -38,6 +39,12 @@
   transition ever flashes backwards, that step is the place to look.
 - `PlataUITests/MorphSettingsUITests.swift` asserts that the name changes on swipe for every
   technique. A UI test cannot see the animation itself, so the look still needs a human.
+- `Tests/MorphChecks.swift` asserts that every engine starts and ends at rest: full opacity, no
+  scaling, offset, blur or rotation, and the real character. That is the invariant that keeps a
+  title from settling crooked, blurred or showing a roulette letter.
+- The native `contentTransition(.interpolate)` option was removed after the user reported it did
+  not animate at all. The navigation title in `CardOrderingView` uses the same modifier, so it is
+  very likely not animating either — worth a look, but outside what was asked here.
 
 ## Git state / next agent
 - Repository: https://github.com/sytykhandrei1/test-task.git
