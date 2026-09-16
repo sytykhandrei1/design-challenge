@@ -2,8 +2,7 @@ import XCTest
 
 final class MorphSettingsUITests: XCTestCase {
     /// Chip order on the settings screen, matching `MorphStyle.allCases`.
-    private let techniques = ["Diff", "Stagger", "Scale", "Evaporate", "Fall", "Shapeshift",
-                              "Reveal", "Spin", "Roulette", "Blur", "Shrink"]
+    private let techniques = ["Diff", "Stagger", "Shapeshift", "Blur"]
 
     @MainActor
     func testEveryTechniqueChangesTheNameOnSwipe() throws {

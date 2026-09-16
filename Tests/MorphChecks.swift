@@ -79,11 +79,14 @@ struct MorphChecks {
             atRest(style.arriving(1, seed: 7), "\(style) must settle at rest for every character")
         }
 
-        // Roulette is the one engine that draws something other than the real character.
-        precondition(MorphStyle.roulette.arriving(0.5, seed: 3).substitute != nil,
-                     "Roulette should be spinning half way through")
-        precondition(MorphStyle.diff.arriving(0.5, seed: 3).substitute == nil,
-                     "Only roulette substitutes characters")
+        // None of the remaining engines draws anything other than the real character.
+        for style in MorphStyle.allCases {
+            for step in [0.25, 0.5, 0.75] {
+                precondition(style.leaving(step).substitute == nil, "\(style) must not swap characters")
+                precondition(style.arriving(step, seed: 3).substitute == nil,
+                             "\(style) must not swap characters")
+            }
+        }
     }
 
     private static func atRest(_ look: GlyphAppearance, _ message: String) {
