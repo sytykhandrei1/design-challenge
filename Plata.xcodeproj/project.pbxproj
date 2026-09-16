@@ -11,8 +11,12 @@
 		0000000000000000000000C9 /* CardOrderingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000065 /* CardOrderingView.swift */; };
 		0000000000000000000000CA /* CardPhysics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000066 /* CardPhysics.swift */; };
 		0000000000000000000000CB /* MetalCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000067 /* MetalCard.swift */; };
+		0000000000000000000000CC /* TextMorph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000068 /* TextMorph.swift */; };
+		0000000000000000000000CD /* MorphingTitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000069 /* MorphingTitle.swift */; };
+		0000000000000000000000CE /* MorphSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000000000000000000006A /* MorphSettingsView.swift */; };
 		0000000000000000000000D2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 00000000000000000000006E /* Assets.xcassets */; };
 		0000000000000000000000D4 /* CardFlowUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000070 /* CardFlowUITests.swift */; };
+		0000000000000000000000D6 /* MorphSettingsUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000072 /* MorphSettingsUITests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -30,9 +34,13 @@
 		000000000000000000000065 /* CardOrderingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardOrderingView.swift; sourceTree = "<group>"; };
 		000000000000000000000066 /* CardPhysics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardPhysics.swift; sourceTree = "<group>"; };
 		000000000000000000000067 /* MetalCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalCard.swift; sourceTree = "<group>"; };
+		000000000000000000000068 /* TextMorph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextMorph.swift; sourceTree = "<group>"; };
+		000000000000000000000069 /* MorphingTitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MorphingTitle.swift; sourceTree = "<group>"; };
+		00000000000000000000006A /* MorphSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MorphSettingsView.swift; sourceTree = "<group>"; };
 		00000000000000000000006E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		00000000000000000000006F /* Plata.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; path = Plata.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		000000000000000000000070 /* CardFlowUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardFlowUITests.swift; sourceTree = "<group>"; };
+		000000000000000000000072 /* MorphSettingsUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MorphSettingsUITests.swift; sourceTree = "<group>"; };
 		000000000000000000000071 /* PlataUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = PlataUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -70,6 +78,9 @@
 				000000000000000000000065 /* CardOrderingView.swift */,
 				000000000000000000000066 /* CardPhysics.swift */,
 				000000000000000000000067 /* MetalCard.swift */,
+				000000000000000000000068 /* TextMorph.swift */,
+				000000000000000000000069 /* MorphingTitle.swift */,
+				00000000000000000000006A /* MorphSettingsView.swift */,
 				00000000000000000000006E /* Assets.xcassets */,
 			);
 			path = Plata;
@@ -88,6 +99,7 @@
 			isa = PBXGroup;
 			children = (
 				000000000000000000000070 /* CardFlowUITests.swift */,
+				000000000000000000000072 /* MorphSettingsUITests.swift */,
 			);
 			path = PlataUITests;
 			sourceTree = "<group>";
@@ -185,6 +197,9 @@
 				0000000000000000000000C9 /* CardOrderingView.swift in Sources */,
 				0000000000000000000000CA /* CardPhysics.swift in Sources */,
 				0000000000000000000000CB /* MetalCard.swift in Sources */,
+				0000000000000000000000CC /* TextMorph.swift in Sources */,
+				0000000000000000000000CD /* MorphingTitle.swift in Sources */,
+				0000000000000000000000CE /* MorphSettingsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -193,6 +208,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0000000000000000000000D4 /* CardFlowUITests.swift in Sources */,
+				0000000000000000000000D6 /* MorphSettingsUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

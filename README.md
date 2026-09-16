@@ -17,16 +17,31 @@ The app opens directly into the card selection sheet. Swipe horizontally, tap a 
 - Reduce Motion shortens transitions and limits tilt. VoiceOver supports activation and carousel adjustment.
 - In preview, an immediate contact recognizer takes ownership of the card gesture and interactive sheet dismissal is disabled. This prevents a downward drag from moving the entire sheet.
 
+## Title morphing
+
+The gear button on the account screen opens **Settings**, a bench for choosing how an animated title should change. A four-name slider (`Sand dunes`, `Classic Plata`, `Metal Plata`, `Beautiful nature`) morphs the name in place on every swipe; the segmented control picks the technique, and `Compare all three` runs all of them from the same swipe.
+
+- **Native** — `contentTransition(.interpolate)`, exactly what the navigation title uses today. No measurement, the whole label cross-fades.
+- **Diff** — the longest common subsequence of the two names is matched, so shared characters keep their identity and slide to their new position while the rest fade. `Classic Plata` → `Metal Plata` carries the whole word `Plata` across.
+- **Stagger** — every character leaves upwards and the new ones arrive from below with a left-to-right delay, the model used by AnimateText. Reproduced locally rather than added as a package, so the project stays buildable with no network and no dependencies.
+
+Character positions come from CoreText on the same system font SwiftUI draws with. `MorphStage` conforms to `Animatable`, so the spring runs on the animation system: no timer, no display link. Whitespace never pairs — it draws nothing, and matching it would spend the budget visible glyphs need. Reduce Motion drops the travel, blur and stagger and leaves a short cross-fade.
+
 ## Files
 
 | File | Purpose |
 | --- | --- |
-| `Plata/PlataApp.swift` | Native shell and sheet entry |
+| `Plata/PlataApp.swift` | Native shell, sheet entry and settings button |
 | `Plata/CardOrderingView.swift` | Carousel and shared transition |
 | `Plata/MetalCard.swift` | Touch input and material rendering |
 | `Plata/CardPhysics.swift` | Angular spring integration |
+| `Plata/TextMorph.swift` | Card names, technique list and the character diff |
+| `Plata/MorphingTitle.swift` | Glyph measurement and the two custom engines |
+| `Plata/MorphSettingsView.swift` | Settings screen: name slider and technique switch |
 | `Tests/PhysicsChecks.swift` | Numerical checks |
+| `Tests/MorphChecks.swift` | Character diff checks |
 | `PlataUITests/CardFlowUITests.swift` | End-to-end UI test |
+| `PlataUITests/MorphSettingsUITests.swift` | Settings screen UI test |
 | `AGENTS.md` | User requirements and push rules |
 | `STATUS.md` | Verification and handoff |
 
@@ -37,9 +52,11 @@ export DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer
 xcodebuild -project Plata.xcodeproj -scheme Plata -destination 'platform=iOS Simulator,name=iPhone 17 Pro' -derivedDataPath build test
 xcrun swiftc Plata/CardPhysics.swift Tests/PhysicsChecks.swift -o /tmp/plata-physics-checks
 /tmp/plata-physics-checks
+xcrun swiftc Plata/TextMorph.swift Tests/MorphChecks.swift -o /tmp/plata-morph-checks
+/tmp/plata-morph-checks
 ```
 
-The project and shared scheme are included. `Scripts/create-project.py` regenerates them without XcodeGen and overwrites the project definition; keep that script updated when changing build settings.
+The project and shared scheme are included. `Scripts/create-project.py` regenerates them without XcodeGen and overwrites the project definition; keep that script updated when adding source files or changing build settings. It lists every source explicitly, so a new file has to be added there and to `project.pbxproj` together.
 
 ## Acceptance and GitHub
 
