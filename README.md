@@ -21,27 +21,20 @@ The app opens directly into the card selection sheet. Swipe horizontally, tap a 
 
 The gear button on the account screen opens **Settings**, a bench for choosing how an animated title should change. A four-name slider (`Sand dunes`, `Classic Plata`, `Metal Plata`, `Beautiful nature`) morphs the name in place on every swipe; the chip row picks the technique.
 
-Eleven techniques are offered, each modelled on an open-source project and reproduced locally rather than added as a package, so the project stays buildable with no network and no dependencies:
+Four techniques are offered, each modelled on an open-source project and reproduced locally rather than added as a package, so the project stays buildable with no network and no dependencies:
 
 | Technique | Modelled on | What it does |
 | --- | --- | --- |
 | Diff | textmorph-ios | Shared characters keep their identity and slide to the new position; only the rest fade |
 | Stagger | AnimateText | Characters leave upwards and arrive from below, one after another |
-| Scale | LTMorphingLabel | Old characters shrink away to nothing, new ones grow out of nothing |
-| Evaporate | LTMorphingLabel | Old characters drift up and blur out, new ones condense down into place |
-| Fall | LTMorphingLabel / ZCAnimatedLabel | Old characters tip over and drop out of the line, new ones fall in from above |
 | Shapeshift | ZCAnimatedLabel | Characters balloon outwards as they leave and shrink in from oversize as they arrive |
-| Reveal | ZCAnimatedLabel | No movement at all: a left-to-right wipe |
-| Spin | ZCAnimatedLabel | Each character turns edge-on and its replacement turns back in behind it |
-| Roulette | SwiftUI-Text-Animation-Library | Arriving characters cycle through the alphabet before settling |
 | Blur | SwiftUI-Text-Animation-Library | Pure defocus: the old name blurs out while the new one sharpens up |
-| Shrink | TOMSMorphingLabel | Characters shrink towards their centre with a narrow left-to-right wave |
 
-`contentTransition(.interpolate)` was offered as a twelfth, native option and removed: on a `Text` whose whole string changes it produced no visible animation, which also means the navigation title in `CardOrderingView` is not currently animating either.
+A native option using `contentTransition(.interpolate)` was offered and removed: on a `Text` whose whole string changes it produced no visible animation, which also means the navigation title in `CardOrderingView` is not currently animating either.
 
 Every technique is written as a `GlyphAppearance` over a local progress from 0 to 1, so a new one is arithmetic rather than new drawing code. Character positions come from CoreText on the same system font SwiftUI draws with. `MorphStage` conforms to `Animatable`, so the spring runs on the animation system: no timer, no display link. Whitespace never pairs — it draws nothing, and matching it would spend the budget visible glyphs need, which is how `Classic Plata` → `Metal Plata` carries the whole word `Plata` across. Reduce Motion drops every moving part and leaves a cross-fade.
 
-Not included: the particle effects of LTMorphingLabel (`sparkle`, `burn`, `anvil`, `pixelate`), which need `CAEmitterLayer`, and the Metal shader effects of SwiftMotion (`liquid`, `glitch`, `wave`), which need a `.metal` file in the target and a different pipeline.
+Scale, Evaporate, Fall, Reveal, Spin, Roulette and Shrink were built and then dropped at the user's request; they are in the history of this branch if any of them is wanted back. Never built: the particle effects of LTMorphingLabel (`sparkle`, `burn`, `anvil`, `pixelate`), which need `CAEmitterLayer`, and the Metal shader effects of SwiftMotion (`liquid`, `glitch`, `wave`), which need a `.metal` file in the target and a different pipeline.
 
 ## Files
 
@@ -51,7 +44,7 @@ Not included: the particle effects of LTMorphingLabel (`sparkle`, `burn`, `anvil
 | `Plata/CardOrderingView.swift` | Carousel and shared transition |
 | `Plata/MetalCard.swift` | Touch input and material rendering |
 | `Plata/CardPhysics.swift` | Angular spring integration |
-| `Plata/TextMorph.swift` | Card names, the eleven engines and the character diff |
+| `Plata/TextMorph.swift` | Card names, the four engines and the character diff |
 | `Plata/MorphingTitle.swift` | Glyph measurement and the animated stage |
 | `Plata/MorphSettingsView.swift` | Settings screen: name slider and technique chips |
 | `Tests/PhysicsChecks.swift` | Numerical checks |
