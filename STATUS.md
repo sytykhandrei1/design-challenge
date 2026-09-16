@@ -7,6 +7,10 @@
 - Original artwork, touch-position torque, damped release and angle-driven reflections.
 - Accessibility actions, Reduce Motion, safe-area layout and bounded card sizing.
 - Xcode project, shared scheme, numerical physics checks and UI test.
+- Settings screen behind a gear button on the account screen: a four-name slider that morphs the
+  name in place on swipe, a segmented switch between the three candidate techniques (native
+  `contentTransition`, character diff, staggered per-character) and a compare mode that runs all
+  three from one swipe. AnimateText's model is reproduced locally; no package was added.
 
 ## Verification
 - Xcode 26.6: build-for-testing passed for iOS Simulator.
@@ -18,6 +22,22 @@
 - Local evidence (ignored in git): `TestResults/contact-fixed.mp4`, `TestResults/contact-test.log`, `TestResults/contact-frames/`; screenshots from initial UI test in `TestResults/Screenshots/`.
 - Xcode emitted a non-fatal simulator-diagnostics collection warning because the machine's global developer path points to CommandLineTools; builds/tests use DEVELOPER_DIR explicitly and passed. No global Xcode settings changed.
 - Physical device performance and subjective feel need user acceptance. No measured frame-rate claim.
+
+## Title morphing: not yet verified
+- The morphing work was written in a Linux session with no Swift toolchain and no Xcode, so **none
+  of it has been compiled or run**. Everything below is review, not a test result.
+- The expected output of `morphPairs` was cross-checked against a reference implementation of the
+  same algorithm for all sixteen ordered pairs of the four names, and those numbers are what
+  `Tests/MorphChecks.swift` asserts. The Swift file itself was never executed.
+- `Plata.xcodeproj/project.pbxproj` was edited by hand and then compared object by object against
+  the output of `Scripts/create-project.py`: same objects, same membership, only formatting and key
+  order differ. The generator previously dropped `DEVELOPMENT_TEAM`; it now emits it, so
+  regenerating no longer loses the signing team.
+- Worth watching on the first run: the two-step retarget in `MorphingTitle` relies on
+  `Transaction.disablesAnimations` to place the new layout without animating into it. If a
+  transition ever flashes backwards, that step is the place to look.
+- `PlataUITests/MorphSettingsUITests.swift` asserts that the name changes on swipe for every
+  technique. A UI test cannot see the animation itself, so the look still needs a human.
 
 ## Git state / next agent
 - Repository: https://github.com/sytykhandrei1/test-task.git

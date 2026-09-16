@@ -25,6 +25,16 @@ struct BankRootView: View {
                 .background(Color("ModalBackground"))
                 .navigationTitle("Account")
                 .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        NavigationLink { MorphSettingsView() } label: {
+                            Image(systemName: "gearshape")
+                        }
+                        .tint(.primary)
+                        .accessibilityLabel("Settings")
+                        .accessibilityIdentifier("settingsButton")
+                    }
+                }
             }
             .tabItem { Label("Home", systemImage: "house") }
             NavigationStack { Text("Pay").navigationTitle("Pay") }
