@@ -3,22 +3,33 @@ import Foundation
 @main
 struct MorphChecks {
     static func main() {
-        let titles = CardTitles.all
-        precondition(titles == ["Sand dunes", "Classic Plata", "Metal Plata", "Beautiful nature"])
+        checkNames()
+        checkPairs()
+        checkEngines()
+        print("PASS: names, identity, reading order, whitespace, word survival, empty input, "
+              + "\(MorphStyle.allCases.count) engines at rest")
+    }
 
-        // A string morphing into itself keeps every visible character; spaces never pair.
+    // MARK: Character diff
+
+    private static func checkNames() {
+        precondition(CardTitles.all == ["Sand dunes", "Classic Plata", "Metal Plata", "Beautiful nature"])
+
+        // A name morphing into itself keeps every visible character; spaces never pair.
         let visible = [9, 12, 10, 15]
-        for (slot, title) in titles.enumerated() {
+        for (slot, title) in CardTitles.all.enumerated() {
             let characters = Array(title)
             let pairs = morphPairs(from: characters, to: characters)
             precondition(pairs.count == visible[slot], "Identity morph must keep every glyph")
             precondition(pairs.allSatisfy { $0.from == $0.to }, "Identity morph must not move glyphs")
         }
+    }
 
+    private static func checkPairs() {
         // Shared characters found between every ordered pair of names.
         let expected: [[Int]] = [[0, 2, 1, 4], [2, 0, 6, 5], [1, 6, 0, 5], [4, 5, 5, 0]]
-        for (from, old) in titles.enumerated() {
-            for (to, new) in titles.enumerated() where from != to {
+        for (from, old) in CardTitles.all.enumerated() {
+            for (to, new) in CardTitles.all.enumerated() where from != to {
                 let before = Array(old)
                 let after = Array(new)
                 let pairs = morphPairs(from: before, to: after)
@@ -44,8 +55,46 @@ struct MorphChecks {
 
         precondition(morphPairs(from: [], to: metal).isEmpty)
         precondition(morphPairs(from: metal, to: []).isEmpty)
-        precondition(morphPairs(from: Array("   "), to: Array("   ")).isEmpty, "Blank strings share nothing")
-
-        print("PASS: identity, reading order, glyph equality, whitespace, word survival, empty input")
+        precondition(morphPairs(from: Array("   "), to: Array("   ")).isEmpty, "Blank names share nothing")
     }
+
+    // MARK: Engines
+
+    private static func checkEngines() {
+        precondition(MorphStyle.allCases.first == .diff, "The diff engine is the default")
+        precondition(MorphStyle.allCases.filter(\.usesPairing) == [.diff],
+                     "Only the diff engine matches characters between names")
+
+        for style in MorphStyle.allCases {
+            precondition(!style.title.isEmpty && !style.source.isEmpty && !style.detail.isEmpty,
+                         "\(style) needs a name, a source and a description")
+            // The wave divides by 1 - spread, so a full-width wave would never finish.
+            precondition(style.spread >= 0 && style.spread < 1, "\(style) has an unusable wave")
+
+            atRest(style.leaving(0), "\(style) must start at rest")
+            precondition(gone(style.leaving(1)), "\(style) must leave nothing behind")
+            precondition(gone(style.arriving(0, seed: 0)), "\(style) must arrive from nothing")
+            atRest(style.arriving(1, seed: 0), "\(style) must settle at rest")
+            // Seeds are per character, so the resting frame has to ignore them.
+            atRest(style.arriving(1, seed: 7), "\(style) must settle at rest for every character")
+        }
+
+        // Roulette is the one engine that draws something other than the real character.
+        precondition(MorphStyle.roulette.arriving(0.5, seed: 3).substitute != nil,
+                     "Roulette should be spinning half way through")
+        precondition(MorphStyle.diff.arriving(0.5, seed: 3).substitute == nil,
+                     "Only roulette substitutes characters")
+    }
+
+    private static func atRest(_ look: GlyphAppearance, _ message: String) {
+        precondition(close(look.opacity, 1), message + " (opacity)")
+        precondition(close(look.scale, 1), message + " (scale)")
+        precondition(close(look.dx, 0) && close(look.dy, 0), message + " (offset)")
+        precondition(close(look.blur, 0), message + " (blur)")
+        precondition(close(look.rotation, 0), message + " (rotation)")
+        precondition(look.substitute == nil, message + " (character)")
+    }
+
+    private static func gone(_ look: GlyphAppearance) -> Bool { close(look.opacity, 0) }
+    private static func close(_ value: Double, _ target: Double) -> Bool { abs(value - target) < 1e-9 }
 }

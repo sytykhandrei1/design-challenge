@@ -1,10 +1,12 @@
 import XCTest
 
 final class MorphSettingsUITests: XCTestCase {
-    private let styles = ["Native", "Diff", "Stagger"]
+    /// Chip order on the settings screen, matching `MorphStyle.allCases`.
+    private let techniques = ["Diff", "Stagger", "Scale", "Evaporate", "Fall", "Shapeshift",
+                              "Reveal", "Spin", "Roulette", "Blur", "Shrink"]
 
     @MainActor
-    func testEveryStyleChangesTheNameOnSwipe() throws {
+    func testEveryTechniqueChangesTheNameOnSwipe() throws {
         let app = launchSettings()
         let slider = app.descendants(matching: .any).matching(identifier: "morphSlider").firstMatch
         XCTAssertTrue(slider.waitForExistence(timeout: 3), "The name slider is on the settings screen")
@@ -12,34 +14,20 @@ final class MorphSettingsUITests: XCTestCase {
         XCTAssertTrue(title.waitForExistence(timeout: 3))
         XCTAssertEqual(title.label, "Sand dunes", "The slider starts on the name used under the card")
 
-        for style in styles {
-            app.buttons[style].firstMatch.tap()
-            XCTAssertEqual(title.label, "Sand dunes", "Switching technique is not a transition")
+        for (slot, technique) in techniques.enumerated() {
+            let chip = app.buttons["style-\(slot)"]
+            XCTAssertTrue(chip.waitForExistence(timeout: 3), "\(technique) is offered on the screen")
+            reveal(chip, in: app)
+            chip.tap()
+            XCTAssertEqual(title.label, "Sand dunes", "\(technique): switching is not a transition")
 
             slider.swipeLeft()
-            waitForLabel(title, toChangeFrom: "Sand dunes", style: style)
+            waitForLabel(title, toChangeFrom: "Sand dunes", technique: technique)
             XCTAssertEqual(title.label, "Classic Plata")
 
             slider.swipeRight()
-            waitForLabel(title, toChangeFrom: "Classic Plata", style: style)
-            XCTAssertEqual(title.label, "Sand dunes", "Swiping back returns to the previous name")
-        }
-    }
-
-    @MainActor
-    func testCompareModeDrivesAllThreeTitles() throws {
-        let app = launchSettings()
-        app.switches["compareAll"].firstMatch.tap()
-        let titles = (0..<styles.count).map {
-            app.descendants(matching: .any).matching(identifier: "morphTitle-\($0)").firstMatch
-        }
-        for title in titles {
-            XCTAssertTrue(title.waitForExistence(timeout: 3), "Every technique gets its own title")
-            XCTAssertEqual(title.label, "Sand dunes")
-        }
-        app.descendants(matching: .any).matching(identifier: "morphSlider").firstMatch.swipeLeft()
-        for (slot, title) in titles.enumerated() {
-            waitForLabel(title, toChangeFrom: "Sand dunes", style: styles[slot])
+            waitForLabel(title, toChangeFrom: "Classic Plata", technique: technique)
+            XCTAssertEqual(title.label, "Sand dunes", "\(technique): swiping back returns the name")
         }
     }
 
@@ -56,11 +44,22 @@ final class MorphSettingsUITests: XCTestCase {
         return app
     }
 
+    /// The technique chips scroll horizontally, so later ones have to be brought into view.
     @MainActor
-    private func waitForLabel(_ element: XCUIElement, toChangeFrom old: String, style: String) {
+    private func reveal(_ chip: XCUIElement, in app: XCUIApplication) {
+        let row = app.descendants(matching: .any).matching(identifier: "styleRow").firstMatch
+        var attempts = 0
+        while !chip.isHittable && attempts < 5 {
+            row.swipeLeft()
+            attempts += 1
+        }
+    }
+
+    @MainActor
+    private func waitForLabel(_ element: XCUIElement, toChangeFrom old: String, technique: String) {
         let expectation = XCTNSPredicateExpectation(predicate: NSPredicate(format: "label != %@", old),
                                                     object: element)
         XCTAssertEqual(XCTWaiter().wait(for: [expectation], timeout: 3), .completed,
-                       "\(style): the name should change on swipe")
+                       "\(technique): the name should change on swipe")
     }
 }
