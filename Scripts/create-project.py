@@ -6,7 +6,7 @@ def write_json(p,o):
  p.parent.mkdir(parents=True,exist_ok=True); p.write_text(json.dumps(o,indent=2)+'\n')
 info={'author':'xcode','version':1}
 write_json(assets/'Contents.json',{'info':info})
-for name in ['hola-platacard','settings']:
+for name in ['hola-platacard','hola-platacard-back','settings']:
  write_json(assets/f'{name}.imageset/Contents.json',{'images':[{'filename':name+'.png','idiom':'universal'}],'info':info})
 for name,rgb in {'ModalBackground':'F5F6F9','CardTitle':'333333','SetupBadge':'ABABAB','AccentColor':'FF5000'}.items():
  write_json(assets/f'{name}.colorset/Contents.json',{'colors':[{'idiom':'universal','color':{'color-space':'srgb','components':dict(zip(['red','green','blue'],[str(int(rgb[i:i+2],16)/255) for i in (0,2,4)]),alpha='1.000')}}],'info':info})

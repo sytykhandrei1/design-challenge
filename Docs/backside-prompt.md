@@ -1,0 +1,9 @@
+# Backside texture
+
+Generated with the built-in image generation tool, using the existing front as a material reference. Original front bytes are unchanged. Asset: `Plata/Assets.xcassets/hola-platacard-back.imageset/hola-platacard-back.png`.
+
+Use case: product-mockup. Asset type: full-bleed UV texture for the REVERSE side of an interactive 3D metal bank card in an iOS app.
+Input image: material and color reference only, the existing FRONT of the card; do not output the front.
+Create the BACK of the same copper metal card. Match exactly its warm pale rose-copper / champagne bronze color, fine HORIZONTAL directional brushed metal grain, restrained realistic etched detailing. Full rectangular landscape image around 1.727:1, viewed absolutely front-on, no perspective, no visible thickness, NO rounded corners and NO background or margins: metal fills EVERY pixel out to all four edges so it can be mapped onto real geometry.
+Back design: a flat dark warm charcoal magnetic stripe across the full width near the upper edge, approximately 16% of card height, inset vertically 9%. Below the stripe, spacious unprinted copper. Small refined laser-engraved wordmark 'PLATA' in the lower left, very subtle dark copper, and two or three fine gently curving engraved dune contour lines across the bottom quarter, echoing the reference. Keep the reverse clean, understated and functional. No chip on back, no Mastercard symbol, no signature panel, no numbers, no expiry, no CVV, no additional words. Shallow recessed engraving, never a raised or ink-printed logo.
+Lighting flat and diffuse with subtle natural metal sheen; preserve fine visible brushing and microtexture, no dramatic highlights or baked shadows. This texture will receive live lighting in the renderer. Do not mirror any text. Output ONE backside UV texture only.

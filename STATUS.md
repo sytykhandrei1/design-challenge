@@ -1,12 +1,17 @@
 # Handoff
 
-## Implemented
-- Two Figma states in a native iOS sheet and navigation stack, over a native tab view.
-- Spring carousel with neighbours visible; continuous expansion and clockwise quarter turn.
-- Animated navigation title, order intentionally does nothing, reverse transition retains selection.
-- Original artwork, touch-position torque, damped release and angle-driven reflections.
-- Accessibility actions, Reduce Motion, safe-area layout and bounded card sizing.
-- Xcode project, shared scheme, numerical physics checks and UI test.
+## Current implementation
+- Two Figma states remain in a native iOS sheet and navigation stack, over a native tab view.
+- Spring carousel with visible neighbours; continuous expansion and clockwise quarter turn are preserved. Navigation title changes in place, without a push.
+- `Order for 799 ₽` remains a no-op. Both return controls preserve carousel selection.
+- One finger rotates the card only around the screen's Y axis. Vertical dragging does not change orientation. A tap does not rotate; full Y turns remain continuous, with no automatic flip, snap or release inertia.
+- Release holds the exact orientation for 3 seconds, then returns to the front in 600 ms. A new contact cancels either the pending or in-progress return at the visible orientation.
+- Two fingers simultaneously support 1×–3× magnification and free pitch, yaw and roll, including rotating the vertical card into a horizontal pose. The selected surface point follows the centroid while orientation and scale change together; release restores scale and translation to 100% in 300 ms.
+- SceneKit renders a closed rounded mesh with bevels, separate front/back materials and a visible metal edge. Model thickness is 0.9 relative to width 100. The front image is unchanged.
+- The generated reverse is brushed copper with a magnetic stripe, small PLATA branding and dunes. Asset: `Plata/Assets.xcassets/hola-platacard-back.imageset/`. Prompt: `Docs/backside-prompt.md`.
+- One immediate multi-touch UIKit recognizer owns preview rotation and scale; carousel gestures yield and sheet dismissal is disabled there. One-to-two-to-one finger transitions rebase without a jump, and the reset timer starts only after the final touch ends.
+- The selected renderer is prepared before interaction; carousel neighbours remain static artwork. Rendering has no continuous idle rotation or shimmer.
+- Existing accessibility labels/actions, reduced-motion entrance transition, safe-area layout and bounded card sizing are retained. Hidden carousel neighbours remain excluded from VoiceOver in preview.
 - Settings screen behind a gear button on the account screen: a four-name slider that morphs the
   name in place on swipe and a chip row switching between four techniques: Diff (textmorph-ios),
   Stagger (AnimateText), Shapeshift (ZCAnimatedLabel) and Blur (SwiftUI-Text-Animation-Library).
@@ -14,44 +19,28 @@
   progress, so adding one is arithmetic. Seven further engines (Scale, Evaporate, Fall, Reveal,
   Spin, Roulette, Shrink) were built and dropped on request; they remain in the branch history.
 
-## Verification
-- Xcode 26.6: build-for-testing passed for iOS Simulator.
-- Physics checks passed: direction, equilibrium, release, 60/120 Hz consistency, long-frame stability, reduced-motion cap.
-- UI flow passed on iPhone 17 Pro / iOS 26.5: launch into selection, order no-op, swipe, expansion, drag over metal, bottom-button return preserving selection, toolbar return.
-- Reviewed screenshots against both Figma states and recorded the final gesture test. Confirmed visible perspective tilt and moving reflection during contact; sheet remains stationary and the card returns to rest.
-- Fixed an interaction conflict found in recording: preview contact now uses an immediate UIKit recognizer, carousel gestures yield to the surface, and interactive sheet dismissal is disabled in preview.
-- Hidden carousel neighbours are excluded from VoiceOver in preview.
-- Local evidence (ignored in git): `TestResults/contact-fixed.mp4`, `TestResults/contact-test.log`, `TestResults/contact-frames/`; screenshots from initial UI test in `TestResults/Screenshots/`.
-- Xcode emitted a non-fatal simulator-diagnostics collection warning because the machine's global developer path points to CommandLineTools; builds/tests use DEVELOPER_DIR explicitly and passed. No global Xcode settings changed.
-- Physical device performance and subjective feel need user acceptance. No measured frame-rate claim.
+## Current revision verification
+- Numerical checks PASS: one-finger Y-only yaw, two-finger pitch/yaw/roll, horizontal layout, anchored simultaneous zoom and rotation, exact 3-second deadline, 600 ms shortest return, pending/in-flight cancellation, regrab, full turns, event-frequency consistency, 3× limit and return to 100%.
+- Reproducible command: `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun swiftc -module-cache-path /tmp/plata-rotation-module-cache Plata/CardPhysics.swift Tests/PhysicsChecks.swift -o /tmp/plata-physics-checks`, then `/tmp/plata-physics-checks`.
+- After rebasing onto the title-morphing changes from `origin/main`, the full simulator build and all four UI tests PASS on iPhone 17 Pro / iOS 26.5: the native card flow, horizontal-only one-finger rotation with timed return, simultaneous two-finger zoom/free rotation followed by restoration, and all four morphing techniques changing the name on swipe. Local result bundle: `TestResults/IntegratedDoD.xcresult`.
+- Exported screenshots in `TestResults/IntegratedDoDScreenshots/` confirm the released partial Y rotation, restored front, retained metal texture, combined two-finger transform and final default state. Exact timing, horizontal layout and in-gesture focal-point math are covered by deterministic numerical checks.
+- Remaining manual checks: subjective gesture feel, two-finger focus under real fingers, Reduce Motion, VoiceOver, a small physical screen and physical-device performance.
+- Physical-device performance and subjective feel still require user verification. No measured frame-rate or complete physical-simulation claim.
+- Builds use `DEVELOPER_DIR` explicitly because the machine's global developer path points to CommandLineTools; do not change the global setting for this project.
 
-## Title morphing: not yet verified
-- The morphing work was written in a Linux session with no Swift toolchain and no Xcode, so **none
-  of it has been compiled or run**. Everything below is review, not a test result.
-- The expected output of `morphPairs` was cross-checked against a reference implementation of the
-  same algorithm for all sixteen ordered pairs of the four names, and those numbers are what
-  `Tests/MorphChecks.swift` asserts. The Swift file itself was never executed.
-- `Plata.xcodeproj/project.pbxproj` was edited by hand and then compared object by object against
-  the output of `Scripts/create-project.py`: same objects, same membership, only formatting and key
-  order differ. The generator previously dropped `DEVELOPMENT_TEAM`; it now emits it, so
-  regenerating no longer loses the signing team.
-- Worth watching on the first run: the two-step retarget in `MorphingTitle` relies on
-  `Transaction.disablesAnimations` to place the new layout without animating into it. If a
-  transition ever flashes backwards, that step is the place to look.
-- `PlataUITests/MorphSettingsUITests.swift` asserts that the name changes on swipe for every
-  technique. A UI test cannot see the animation itself, so the look still needs a human.
-- `Tests/MorphChecks.swift` asserts that every engine starts and ends at rest: full opacity, no
-  scaling, offset, blur or rotation, and the real character. That is the invariant that keeps a
-  title from settling crooked, blurred or half faded.
+## Title morphing verification
+- `Tests/MorphChecks.swift` PASS under the local Swift/Xcode toolchain: all names, character pairing, reading order, whitespace, word survival, empty input and the rest state of all four engines are covered.
+- `PlataUITests/MorphSettingsUITests.swift` PASS in the same integrated Xcode run as the card tests: each of the four techniques changes the name on left and right swipes.
+- The project file and `Scripts/create-project.py` both include all three morphing source files and the morphing UI test, while the generator also retains the card's new reverse asset.
+- UI automation verifies final labels and interaction. The subjective appearance of each animation still needs a human review on a device or simulator.
 - The native `contentTransition(.interpolate)` option was removed after the user reported it did
   not animate at all. The navigation title in `CardOrderingView` uses the same modifier, so it is
   very likely not animating either — worth a look, but outside what was asked here.
 
 ## Git state / next agent
 - Repository: https://github.com/sytykhandrei1/test-task.git
-- The user explicitly authorized publishing this implementation to main ("пуши в main"). This is the baseline for the next agent.
-- Authenticated account checked: sytykhandrei1, GitHub ID 233566150.
-- Local author: sytykhandrei1 <233566150+sytykhandrei1@users.noreply.github.com>.
-- Follow AGENTS.md; report completed tasks and remaining work. After acceptance, check remote updates, commit accepted work, and push main without force.
-- Five carousel slots repeat the only supplied design, following the reference.
-- No implementation task is currently outstanding. Device performance and subjective animation refinements can be reviewed in the next iteration; do not infer physical-device validation from simulator tests or publication authorization.
+- The reverse, solid rendering, direct one-finger rotation, two-finger free transform and related tests/docs passed the simulator and deterministic checks. The user explicitly requested that this verified stage be pushed to `main`.
+- Previously verified GitHub account: `sytykhandrei1`, ID `233566150`. Check current authentication again before the next push.
+- Local author identity: `sytykhandrei1 <233566150+sytykhandrei1@users.noreply.github.com>`.
+- Follow `AGENTS.md`; report completed work and remaining work after each stage. After user acceptance, check remote updates, commit only accepted work, and push `main` without force or overwriting another agent's changes.
+- Five carousel slots still repeat the supplied front design, following the reference. The generated reverse is its back, not another carousel design.

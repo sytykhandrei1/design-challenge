@@ -27,15 +27,10 @@ struct CardOrderingView: View {
                 ZStack {
                     ForEach(designs, id: \.self) { index in
                         let active = index == selected
-                        MetalCard(interactive: preview && active, reduceMotion: reduceMotion)
+                        MetalCard(interactive: preview && active, prepareForInteraction: active)
                             .frame(width: preview && active ? expandedWidth : cardWidth,
                                    height: preview && active ? expandedHeight : cardHeight)
-                            .rotationEffect(.degrees(preview && active ? 90 : 0))
-                            .position(x: width / 2 + CGFloat(index - selected) * stride + (preview ? 0 : drag),
-                                      y: centerY)
-                            .opacity(preview && !active ? 0 : 1)
-                            .zIndex(active ? 1 : 0)
-                            .allowsHitTesting(!preview || active)
+                            .contentShape(Rectangle())
                             .accessibilityElement(children: .ignore)
                             .accessibilityLabel(preview ? "Metal card preview" : "Sand dunes, design \(index + 1) of 5")
                             .accessibilityIdentifier(active ? "activeCard" : "card\(index)")
@@ -43,6 +38,12 @@ struct CardOrderingView: View {
                             .accessibilityAddTraits(preview ? [] : .isButton)
                             .accessibilityAction { if !preview { open(index) } }
                             .gesture(TapGesture().onEnded { open(index) }, including: preview ? .subviews : .all)
+                            .rotationEffect(.degrees(preview && active ? 90 : 0))
+                            .position(x: width / 2 + CGFloat(index - selected) * stride + (preview ? 0 : drag),
+                                      y: centerY)
+                            .opacity(preview && !active ? 0 : 1)
+                            .zIndex(active ? 1 : 0)
+                            .allowsHitTesting(!preview || active)
                     }
 
                     VStack(spacing: 18) {
