@@ -1,7 +1,11 @@
 # Handoff
 
 ## Current implementation
-- Two Figma states remain in a native iOS sheet and navigation stack, over a native tab view.
+- The app now starts on the Figma Home screen. Home → Account → Recipient → Card Type uses one native `NavigationStack` with system push/back transitions and no bottom tab bar.
+- Account shows two existing cards and a plus block. Recipient offers `Me` and `Another person`; Card Type offers `Physical` and `Digital` in English.
+- `Physical` presents the pre-existing `CardOrderingView` in its original large system sheet. The card-ordering source and its carousel, preview, gestures and visuals were not changed. `Digital` is intentionally nominal for now.
+- New local assets reproduce the supplied Figma profile, background, account card skin and invite illustration.
+- The two existing card-design Figma states remain in their native sheet and internal navigation stack.
 - Spring carousel with visible neighbours; continuous expansion and clockwise quarter turn are preserved. Navigation title changes in place, without a push.
 - `Order for 799 ₽` remains a no-op. Both return controls preserve carousel selection.
 - One finger rotates the card only around the screen's Y axis. Vertical dragging does not change orientation. A tap does not rotate; full Y turns remain continuous, with no automatic flip, snap or release inertia.
@@ -20,9 +24,11 @@
   Spin, Roulette, Shrink) were built and dropped on request; they remain in the branch history.
 
 ## Current revision verification
+- The new end-to-end UI test verifies Home → Account → Recipient → Card Type, native Back to Recipient, the `Another person` path and opening the existing card flow from `Physical`. Five retained screenshots were visually reviewed against the supplied Figma nodes; the card sheet has one navbar and keeps its original layout.
+- `git diff --exit-code -- Plata/CardOrderingView.swift` passes, confirming the existing card flow itself is unchanged.
 - Numerical checks PASS: one-finger Y-only yaw, two-finger pitch/yaw/roll, horizontal layout, anchored simultaneous zoom and rotation, exact 3-second deadline, 600 ms shortest return, pending/in-flight cancellation, regrab, full turns, event-frequency consistency, 3× limit and return to 100%.
 - Reproducible command: `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun swiftc -module-cache-path /tmp/plata-rotation-module-cache Plata/CardPhysics.swift Tests/PhysicsChecks.swift -o /tmp/plata-physics-checks`, then `/tmp/plata-physics-checks`.
-- After rebasing onto the title-morphing changes from `origin/main`, the full simulator build and all four UI tests PASS on iPhone 17 Pro / iOS 26.5: the native card flow, horizontal-only one-finger rotation with timed return, simultaneous two-finger zoom/free rotation followed by restoration, and all four morphing techniques changing the name on swipe. Local result bundle: `TestResults/IntegratedDoD.xcresult`.
+- The final simulator run passes all five UI tests on iPhone 17 Pro / iOS 26.5: the new four-screen path and Back navigation, the unchanged carousel/preview flow, horizontal-only one-finger rotation with timed return, simultaneous two-finger zoom/free rotation followed by restoration, and all four morphing techniques changing the name on swipe. Local result bundle: `TestResults/PreorderFlowDoD.xcresult`; screenshots: `TestResults/PreorderFlowScreenshots/`.
 - Exported screenshots in `TestResults/IntegratedDoDScreenshots/` confirm the released partial Y rotation, restored front, retained metal texture, combined two-finger transform and final default state. Exact timing, horizontal layout and in-gesture focal-point math are covered by deterministic numerical checks.
 - Remaining manual checks: subjective gesture feel, two-finger focus under real fingers, Reduce Motion, VoiceOver, a small physical screen and physical-device performance.
 - Physical-device performance and subjective feel still require user verification. No measured frame-rate or complete physical-simulation claim.

@@ -34,11 +34,8 @@ final class MorphSettingsUITests: XCTestCase {
     private func launchSettings() -> XCUIApplication {
         let app = XCUIApplication()
         app.launch()
-        let close = app.buttons["Close card selection"]
-        XCTAssertTrue(close.waitForExistence(timeout: 5), "The app opens into card selection")
-        close.tap()
         let settings = app.buttons["settingsButton"]
-        XCTAssertTrue(settings.waitForExistence(timeout: 5), "The account screen has a settings button")
+        XCTAssertTrue(settings.waitForExistence(timeout: 5), "The home screen has a settings button")
         settings.tap()
         return app
     }

@@ -3,8 +3,7 @@ import XCTest
 final class CardFlowUITests: XCTestCase {
     @MainActor
     func testHorizontalRotationAndTimedReturn() throws {
-        let app = XCUIApplication()
-        app.launch()
+        let app = launchCardSelection()
         let card = app.descendants(matching: .any).matching(identifier: "activeCard").firstMatch
         XCTAssertTrue(card.waitForExistence(timeout: 5))
         card.tap()
@@ -44,8 +43,7 @@ final class CardFlowUITests: XCTestCase {
 
     @MainActor
     func testTwoFingerFreeTransformAndReturn() throws {
-        let app = XCUIApplication()
-        app.launch()
+        let app = launchCardSelection()
         let card = app.descendants(matching: .any).matching(identifier: "activeCard").firstMatch
         XCTAssertTrue(card.waitForExistence(timeout: 5))
         card.tap()
@@ -71,10 +69,9 @@ final class CardFlowUITests: XCTestCase {
 
     @MainActor
     func testCardFlow() throws {
-        let app = XCUIApplication()
-        app.launch()
+        let app = launchCardSelection()
         let action = app.buttons["bottomAction"]
-        XCTAssertTrue(action.waitForExistence(timeout: 5), "Selection opens immediately on launch")
+        XCTAssertTrue(action.waitForExistence(timeout: 5), "Selection opens after the native ordering flow")
         XCTAssertEqual(action.label, "Order for 799 ₽")
         attach("01-selection", app)
         action.tap()
@@ -99,7 +96,55 @@ final class CardFlowUITests: XCTestCase {
         XCTAssertEqual(action.label, "Order for 799 ₽")
         card.tap()
         app.buttons["Back to designs"].firstMatch.tap()
+        let selectionState = NSPredicate(format: "label == %@", "Order for 799 ₽")
+        expectation(for: selectionState, evaluatedWith: action)
+        waitForExpectations(timeout: 3)
+    }
+
+    @MainActor
+    func testNativeOrderingFlowMovesForwardAndBack() throws {
+        let app = XCUIApplication()
+        app.launch()
+        XCTAssertTrue(app.buttons["accountCell"].waitForExistence(timeout: 5))
+        attach("flow-01-home", app)
+        app.buttons["accountCell"].tap()
+        XCTAssertTrue(app.buttons["addCard"].waitForExistence(timeout: 3))
+        attach("flow-02-account", app)
+        app.buttons["addCard"].tap()
+        XCTAssertTrue(app.staticTexts["Who to issue extra\ncard for"].waitForExistence(timeout: 3))
+        attach("flow-03-recipient", app)
+        app.buttons["meOption"].tap()
+        XCTAssertTrue(app.staticTexts["Select card type"].waitForExistence(timeout: 3))
+        attach("flow-04-card-type", app)
+
+        app.navigationBars.buttons.firstMatch.tap()
+        XCTAssertTrue(app.staticTexts["Who to issue extra\ncard for"].waitForExistence(timeout: 3))
+        app.buttons["anotherPersonOption"].tap()
+        XCTAssertTrue(app.buttons["physicalOption"].waitForExistence(timeout: 3))
+        app.buttons["physicalOption"].tap()
         XCTAssertTrue(app.staticTexts["Plastic card"].waitForExistence(timeout: 3))
+        attach("flow-05-card-designs", app)
+        XCTAssertTrue(app.navigationBars.buttons.firstMatch.exists, "The system navigation stack exposes Back")
+    }
+
+    @MainActor
+    private func launchCardSelection() -> XCUIApplication {
+        let app = XCUIApplication()
+        app.launch()
+        let account = app.buttons["accountCell"]
+        XCTAssertTrue(account.waitForExistence(timeout: 5), "Home is the launch screen")
+        account.tap()
+        let add = app.buttons["addCard"]
+        XCTAssertTrue(add.waitForExistence(timeout: 3), "The account shows the add-card block")
+        add.tap()
+        let me = app.buttons["meOption"]
+        XCTAssertTrue(me.waitForExistence(timeout: 3))
+        me.tap()
+        let physical = app.buttons["physicalOption"]
+        XCTAssertTrue(physical.waitForExistence(timeout: 3))
+        physical.tap()
+        XCTAssertTrue(app.buttons["bottomAction"].waitForExistence(timeout: 5))
+        return app
     }
 
     @MainActor
