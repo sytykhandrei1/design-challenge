@@ -1,10 +1,10 @@
 # Handoff
 
 ## Current implementation
-- The app now starts on the Figma Home screen. Home → Account → Recipient → Card Type uses one native `NavigationStack` with system push/back transitions and no bottom tab bar.
-- Account shows two existing cards and a plus block. Recipient offers `Me` and `Another person`; Card Type offers `Physical` and `Digital` in English.
-- `Physical` presents the pre-existing `CardOrderingView` in its original large system sheet. The card-ordering source and its carousel, preview, gestures and visuals were not changed. `Digital` is intentionally nominal for now.
-- New local assets reproduce the supplied Figma profile, background, account card skin and invite illustration.
+- The app starts on one minimal screen in a native `NavigationStack`, with no bottom tab bar. A system Settings button remains in the top-right navbar.
+- The centered `start flow` button uses `#FF5000`, white SF Pro Text 17 Medium text and opens the pre-existing `CardOrderingView` in its original large system sheet.
+- The former Home, Account, Recipient and Card Type screens and their dedicated assets were removed.
+- The card-ordering source and its carousel, preview, gestures and visuals were not changed.
 - The two existing card-design Figma states remain in their native sheet and internal navigation stack.
 - Spring carousel with visible neighbours; continuous expansion and clockwise quarter turn are preserved. Navigation title changes in place, without a push.
 - `Order for 799 ₽` remains a no-op. Both return controls preserve carousel selection.
@@ -16,7 +16,7 @@
 - One immediate multi-touch UIKit recognizer owns preview rotation and scale; carousel gestures yield and sheet dismissal is disabled there. One-to-two-to-one finger transitions rebase without a jump, and the reset timer starts only after the final touch ends.
 - The selected renderer is prepared before interaction; carousel neighbours remain static artwork. Rendering has no continuous idle rotation or shimmer.
 - Existing accessibility labels/actions, reduced-motion entrance transition, safe-area layout and bounded card sizing are retained. Hidden carousel neighbours remain excluded from VoiceOver in preview.
-- Settings screen behind a gear button on the account screen: a four-name slider that morphs the
+- Settings screen behind the gear button on the start screen: a four-name slider that morphs the
   name in place on swipe and a chip row switching between four techniques: Diff (textmorph-ios),
   Stagger (AnimateText), Shapeshift (ZCAnimatedLabel) and Blur (SwiftUI-Text-Animation-Library).
   All reproduced locally; no package was added. Every engine is a `GlyphAppearance` over a local
@@ -24,12 +24,12 @@
   Spin, Roulette, Shrink) were built and dropped on request; they remain in the branch history.
 
 ## Current revision verification
-- The new end-to-end UI test verifies Home → Account → Recipient → Card Type, native Back to Recipient, the `Another person` path and opening the existing card flow from `Physical`. Five retained screenshots were visually reviewed against the supplied Figma nodes; the card sheet has one navbar and keeps its original layout.
+- The start-flow UI test verifies the exact `start flow` label, opens the existing gallery, captures both states, closes the sheet and confirms the start screen returns.
 - `git diff --exit-code -- Plata/CardOrderingView.swift` passes, confirming the existing card flow itself is unchanged.
 - Numerical checks PASS: one-finger Y-only yaw, two-finger pitch/yaw/roll, horizontal layout, anchored simultaneous zoom and rotation, exact 3-second deadline, 600 ms shortest return, pending/in-flight cancellation, regrab, full turns, event-frequency consistency, 3× limit and return to 100%.
 - Reproducible command: `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun swiftc -module-cache-path /tmp/plata-rotation-module-cache Plata/CardPhysics.swift Tests/PhysicsChecks.swift -o /tmp/plata-physics-checks`, then `/tmp/plata-physics-checks`.
-- The final simulator run passes all five UI tests on iPhone 17 Pro / iOS 26.5: the new four-screen path and Back navigation, the unchanged carousel/preview flow, horizontal-only one-finger rotation with timed return, simultaneous two-finger zoom/free rotation followed by restoration, and all four morphing techniques changing the name on swipe. Local result bundle: `TestResults/PreorderFlowDoD.xcresult`; screenshots: `TestResults/PreorderFlowScreenshots/`.
-- Exported screenshots in `TestResults/IntegratedDoDScreenshots/` confirm the released partial Y rotation, restored front, retained metal texture, combined two-finger transform and final default state. Exact timing, horizontal layout and in-gesture focal-point math are covered by deterministic numerical checks.
+- The updated Xcode simulator suite passes: 5 tests, 0 failures. It covers the new start screen, unchanged gallery flow, one-finger rotation, timed return, two-finger free transform and all four title-morph techniques. Result bundle: `/tmp/plata-start-flow.xcresult`.
+- Exported screenshots in `TestResults/StartFlowScreenshots/` confirm the minimal start screen, Settings control and successful transition into the existing gallery. Exact gesture timing, horizontal layout and in-gesture focal-point math are covered by deterministic numerical checks.
 - Remaining manual checks: subjective gesture feel, two-finger focus under real fingers, Reduce Motion, VoiceOver, a small physical screen and physical-device performance.
 - Physical-device performance and subjective feel still require user verification. No measured frame-rate or complete physical-simulation claim.
 - Builds use `DEVELOPER_DIR` explicitly because the machine's global developer path points to CommandLineTools; do not change the global setting for this project.

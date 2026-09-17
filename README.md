@@ -2,19 +2,15 @@
 
 Open `Plata.xcodeproj`, select the shared **Plata** scheme and an iPhone simulator, then Run. Xcode 26 recommended; deployment target iOS 18. No packages or network dependencies. For a physical iPhone, select your development team under Signing & Capabilities.
 
-The app opens on the Figma-based Home screen. Tap **Available in Crédito**, then the plus card, choose a recipient, and choose **Physical**. Home → Account → Recipient → Card Type uses one native `NavigationStack` with system push and back transitions. There is no bottom tab bar. **Physical** presents the existing card-ordering flow in its original large system sheet; **Digital** is currently a nominal option with no action.
+The app opens on a single start screen with no bottom tab bar. Its native navbar keeps the Settings button. The centered **start flow** button uses `#FF5000` and SF Pro Text 17 Medium; tapping it presents the existing card-ordering flow in its original large system sheet.
 
 Inside the existing card flow, swipe horizontally and tap a card to expand it. One-finger movement rotates it only left or right around the screen's Y axis; vertical movement is ignored. With two fingers, zoom and freely rotate around X, Y and Z at the same time, including turning the vertical card horizontal. The card holds its released orientation for three seconds and returns smoothly to the front in 600 ms; a new touch interrupts that return without a jump. The magnified area remains under the two-finger centroid and returns to 100% after release. `Back to designs` reverses the transition and preserves selection. `Order for 799 ₽` intentionally performs no action.
 
 ## Design and implementation
 
-- [Home reference](https://www.figma.com/design/HKe5nEzpNzw770zsXP9F3B/Промотирование-переводов?node-id=5202-27846)
-- [Account reference](https://www.figma.com/design/HKe5nEzpNzw770zsXP9F3B/Промотирование-переводов?node-id=5202-27953)
-- [Recipient reference](https://www.figma.com/design/HKe5nEzpNzw770zsXP9F3B/Промотирование-переводов?node-id=5202-27824)
-- [Card type reference](https://www.figma.com/design/HKe5nEzpNzw770zsXP9F3B/Промотирование-переводов?node-id=5202-27811)
 - [Selection reference](https://www.figma.com/design/h8QUKmJIP3vX8oUHKuzaMx/Problem-Service?node-id=2007-38027)
 - [Expanded reference](https://www.figma.com/design/h8QUKmJIP3vX8oUHKuzaMx/Problem-Service?node-id=2007-38138)
-- Home, Account, Recipient and Card Type are SwiftUI screens in a single `NavigationStack`, with no `TabView`. The existing card ordering view remains unchanged and is presented from **Physical** using its original native large sheet.
+- The start screen is a SwiftUI view inside one `NavigationStack`, with no `TabView`. The existing card ordering view remains unchanged and is presented from **start flow** using its original native large sheet.
 - A continuous card view changes size, position and rotation. Title and button label use a content transition.
 - The supplied `hola-platacard.png` front artwork is unchanged. Five slots repeat that artwork, as in Figma. The title `Plastic card` follows Figma, although the image and requested interaction depict metal.
 - The new `hola-platacard-back` asset supplies the reverse: brushed copper, a magnetic stripe, small PLATA branding and dunes. Its generation prompt is preserved in [`Docs/backside-prompt.md`](Docs/backside-prompt.md).
@@ -48,7 +44,7 @@ Scale, Evaporate, Fall, Reveal, Spin, Roulette and Shrink were built and then dr
 
 | File | Purpose |
 | --- | --- |
-| `Plata/PlataApp.swift` | Home, account, recipient and card-type screens; native navigation and sheet connection |
+| `Plata/PlataApp.swift` | Minimal start screen, Settings entry and existing gallery sheet connection |
 | `Plata/CardOrderingView.swift` | Carousel and shared transition |
 | `Plata/MetalCard.swift` | Immediate touch input, SceneKit solid geometry and materials |
 | `Plata/CardPhysics.swift` | Direct quaternion rotation and gesture lifecycle |
@@ -75,7 +71,7 @@ xcrun swiftc Plata/TextMorph.swift Tests/MorphChecks.swift -o /tmp/plata-morph-c
 /tmp/plata-morph-checks
 ```
 
-Numerical checks cover one-finger horizontal-only rotation, two-finger pitch/yaw/roll, horizontal card layout, combined anchored zoom and rotation, the exact 3-second deadline and 600 ms return, interrupted returns, regrabbing, full turns, event-frequency consistency, the 3× zoom limit and return to 100%. UI checks cover the four-screen native ordering path in both directions, opening the unchanged card flow from **Physical**, carousel/preview behavior, Y-axis rotation, timed return, the combined two-finger transform and title-morph settings. See `STATUS.md` for the latest actual results. Simulator tests do not establish physical-device frame rate or subjective feel.
+Numerical checks cover one-finger horizontal-only rotation, two-finger pitch/yaw/roll, horizontal card layout, combined anchored zoom and rotation, the exact 3-second deadline and 600 ms return, interrupted returns, regrabbing, full turns, event-frequency consistency, the 3× zoom limit and return to 100%. UI checks cover the start screen, opening and closing the unchanged gallery, carousel/preview behavior, Y-axis rotation, timed return, the combined two-finger transform and title-morph settings. See `STATUS.md` for the latest actual results. Simulator tests do not establish physical-device frame rate or subjective feel.
 
 The project and shared scheme are included. `Scripts/create-project.py` regenerates them without XcodeGen and overwrites the project definition; keep that script updated when adding source files or changing build settings. It lists every source explicitly, so a new file has to be added there and to `project.pbxproj` together.
 

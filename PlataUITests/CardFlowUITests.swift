@@ -102,47 +102,29 @@ final class CardFlowUITests: XCTestCase {
     }
 
     @MainActor
-    func testNativeOrderingFlowMovesForwardAndBack() throws {
+    func testStartFlowOpensGalleryAndCloses() throws {
         let app = XCUIApplication()
         app.launch()
-        XCTAssertTrue(app.buttons["accountCell"].waitForExistence(timeout: 5))
-        attach("flow-01-home", app)
-        app.buttons["accountCell"].tap()
-        XCTAssertTrue(app.buttons["addCard"].waitForExistence(timeout: 3))
-        attach("flow-02-account", app)
-        app.buttons["addCard"].tap()
-        XCTAssertTrue(app.staticTexts["Who to issue extra\ncard for"].waitForExistence(timeout: 3))
-        attach("flow-03-recipient", app)
-        app.buttons["meOption"].tap()
-        XCTAssertTrue(app.staticTexts["Select card type"].waitForExistence(timeout: 3))
-        attach("flow-04-card-type", app)
-
-        app.navigationBars.buttons.firstMatch.tap()
-        XCTAssertTrue(app.staticTexts["Who to issue extra\ncard for"].waitForExistence(timeout: 3))
-        app.buttons["anotherPersonOption"].tap()
-        XCTAssertTrue(app.buttons["physicalOption"].waitForExistence(timeout: 3))
-        app.buttons["physicalOption"].tap()
+        let start = app.buttons["startFlowButton"]
+        XCTAssertTrue(start.waitForExistence(timeout: 5))
+        XCTAssertEqual(start.label, "start flow")
+        attach("flow-01-start", app)
+        start.tap()
         XCTAssertTrue(app.staticTexts["Plastic card"].waitForExistence(timeout: 3))
-        attach("flow-05-card-designs", app)
-        XCTAssertTrue(app.navigationBars.buttons.firstMatch.exists, "The system navigation stack exposes Back")
+        attach("flow-02-card-designs", app)
+        let close = app.buttons["Close card selection"]
+        XCTAssertTrue(close.waitForExistence(timeout: 3))
+        close.tap()
+        XCTAssertTrue(start.waitForExistence(timeout: 3))
     }
 
     @MainActor
     private func launchCardSelection() -> XCUIApplication {
         let app = XCUIApplication()
         app.launch()
-        let account = app.buttons["accountCell"]
-        XCTAssertTrue(account.waitForExistence(timeout: 5), "Home is the launch screen")
-        account.tap()
-        let add = app.buttons["addCard"]
-        XCTAssertTrue(add.waitForExistence(timeout: 3), "The account shows the add-card block")
-        add.tap()
-        let me = app.buttons["meOption"]
-        XCTAssertTrue(me.waitForExistence(timeout: 3))
-        me.tap()
-        let physical = app.buttons["physicalOption"]
-        XCTAssertTrue(physical.waitForExistence(timeout: 3))
-        physical.tap()
+        let start = app.buttons["startFlowButton"]
+        XCTAssertTrue(start.waitForExistence(timeout: 5), "The start screen is the launch screen")
+        start.tap()
         XCTAssertTrue(app.buttons["bottomAction"].waitForExistence(timeout: 5))
         return app
     }
