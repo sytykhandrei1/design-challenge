@@ -1,0 +1,35 @@
+{
+  "holder": "SANTIAGO D FERNANDEZ",
+  "mask": "native SF regular 70 px, tracking 2, baseline y1157",
+  "size": [
+    2048,
+    1292
+  ],
+  "changed_rect": [
+    56,
+    1080,
+    922,
+    1184
+  ],
+  "depth_mm": -0.04,
+  "normal": "OpenGL +Y up",
+  "source_unchanged": true,
+  "files": {
+    "front_alex_smith_basecolor.png": {
+      "source_sha256": "e28edfddc4e6aebf1baaf28445ea2eb009c3bf48aae0f5befd2c20ae5665ca1b",
+      "sha256": "daea4b1cc8bcd1e2680d59c3a64c1ef570b74db86c4c43e0e508ac3b20f82608"
+    },
+    "front_alex_smith_roughness_rgb.png": {
+      "source_sha256": "cd52440863e2261e88704920171b39ee68a74e52ca96400c2166cb7b3c51d022",
+      "sha256": "7406190be853b7bb713cffcfe027e91a56ce03b6e6b1624c0bf9de5d918c5cd7"
+    },
+    "front_alex_smith_metalness_rgb.png": {
+      "source_sha256": "47b4e47e8f1644f1bc240a1fe989c741c56db7bdadc64a3a2932d68f4170fc29",
+      "sha256": "ed88edc54bb7ab948d1ddd065e91f20ac5b823d37dd8d183f4acb6c62dada0da"
+    },
+    "front_alex_smith_normal_opengl.png": {
+      "source_sha256": "e4278682cc7a72761cc513d56e5ba33ac66172331636ef1d84fabf6bd2434ed7",
+      "sha256": "0db3b75046e0b6380abecf49001e39d97d884fd4a7a02df38f9bd4f42ec457d0"
+    }
+  }
+}

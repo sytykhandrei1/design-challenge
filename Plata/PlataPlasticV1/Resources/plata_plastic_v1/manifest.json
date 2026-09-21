@@ -1,0 +1,185 @@
+{
+  "version": 1,
+  "physical_mm": [
+    85.6,
+    53.98,
+    0.76
+  ],
+  "normal": "OpenGL tangent space +Y up",
+  "technical_png": "Linear data; R8 roughness, RGB8 normal; no ICC/gAMA; no compression in RealityKit",
+  "base_color": "Uniform sRGB material tint, no baked lighting",
+  "plastic_metallic": 0,
+  "runtime_height": false,
+  "materials": {
+    "matte": {
+      "source": "matte-plastic",
+      "source_sha256": "2ed61f3fb9731d4a64b0a45a8e93c27b4d554af79465b65f7e096e60ec51fcde",
+      "roughness": 0.68,
+      "roughness_variation": 0.027,
+      "height_amplitude_mm": 0.00065,
+      "period_mm": 16
+    },
+    "satin": {
+      "source": "brushed-metal",
+      "source_sha256": "5c34ed895196506296c0c83167b89907d058994d072c01067377c2c1c8a292df",
+      "roughness": 0.4,
+      "roughness_variation": 0.018,
+      "height_amplitude_mm": 0.00032,
+      "period_mm": 16
+    },
+    "gloss": {
+      "source": "glossy-plastic",
+      "source_sha256": "64f6b76bd24d940b268caa03813f1d32849fd4962fd4a719cc1662e24aaf891e",
+      "roughness": 0.17,
+      "roughness_variation": 0.008,
+      "height_amplitude_mm": 5.5e-05,
+      "period_mm": 16
+    }
+  },
+  "files": {
+    "matte_front_normal_opengl.png": {
+      "size": [
+        3072,
+        1937
+      ],
+      "channels": "RGB",
+      "sha256": "c1987b7e6a23c44d4c92f7090c624f8308d90eacd58045fae18964a744d5254a"
+    },
+    "matte_front_roughness.png": {
+      "size": [
+        3072,
+        1937
+      ],
+      "channels": "R",
+      "sha256": "1aa48697e824c6bd8f3bca88cdd8e19855d6efb0c9ed0385f52711add80ab5e5"
+    },
+    "matte_back_normal_opengl.png": {
+      "size": [
+        3072,
+        1937
+      ],
+      "channels": "RGB",
+      "sha256": "e683528b412ca4676c4cf96c9234c97843434cff4119b25d37fe1695ddf99cf5"
+    },
+    "matte_back_roughness.png": {
+      "size": [
+        3072,
+        1937
+      ],
+      "channels": "R",
+      "sha256": "46e330ad7fe1ae4c4d421b99ab3367e477639857425421e644349ee4b0f6649c"
+    },
+    "matte_edge_normal_opengl.png": {
+      "size": [
+        4096,
+        64
+      ],
+      "channels": "RGB",
+      "sha256": "41cfa029508f00f289ee8f67c095e6c8635dd5b5b8bd1c804141617e6185db20"
+    },
+    "matte_edge_roughness.png": {
+      "size": [
+        4096,
+        64
+      ],
+      "channels": "R",
+      "sha256": "7ad2f24e4fc82a22eddf0d6cf3c60c5333f7b2a980ff42531fe9929b3c6f9ccc"
+    },
+    "satin_front_normal_opengl.png": {
+      "size": [
+        3072,
+        1937
+      ],
+      "channels": "RGB",
+      "sha256": "2ab743756ead27a25bb769f47ae60c001d0b683c88b8eb021471c27318da06e1"
+    },
+    "satin_front_roughness.png": {
+      "size": [
+        3072,
+        1937
+      ],
+      "channels": "R",
+      "sha256": "6c748d9e9ea1fa56c666d328c2dcdae8c0d1b91cfdf653271ba1062eee8df1b3"
+    },
+    "satin_back_normal_opengl.png": {
+      "size": [
+        3072,
+        1937
+      ],
+      "channels": "RGB",
+      "sha256": "5d5ee092742e8a83531d3d4d8b6be51e2fdef4ffcba984e554f618bb88d3e450"
+    },
+    "satin_back_roughness.png": {
+      "size": [
+        3072,
+        1937
+      ],
+      "channels": "R",
+      "sha256": "d04666a83ea8328f916cbb7ce73a9ab0fcc4bda7d802c3e1fa09e55e5926fcf9"
+    },
+    "satin_edge_normal_opengl.png": {
+      "size": [
+        4096,
+        64
+      ],
+      "channels": "RGB",
+      "sha256": "52dbd15a7348021b4cddd4f76b76ee69995bd3e2bc0f35b63c325146b9be8cb6"
+    },
+    "satin_edge_roughness.png": {
+      "size": [
+        4096,
+        64
+      ],
+      "channels": "R",
+      "sha256": "ca9c84963063372e2965d8adeb14299f91304299c8c0e7c76493f7056262d224"
+    },
+    "gloss_front_normal_opengl.png": {
+      "size": [
+        3072,
+        1937
+      ],
+      "channels": "RGB",
+      "sha256": "facf1ca045076015b7048e5c30c8d694e63ed647a3312e9cda3999379262d159"
+    },
+    "gloss_front_roughness.png": {
+      "size": [
+        3072,
+        1937
+      ],
+      "channels": "R",
+      "sha256": "cb70b5f8b1300aefce92fe22c09054a8897d119b69541a68fe00e826d0e14e65"
+    },
+    "gloss_back_normal_opengl.png": {
+      "size": [
+        3072,
+        1937
+      ],
+      "channels": "RGB",
+      "sha256": "59e1286227c829a934ce5f01006ab3f23a46c78e45f5e479b32d3abd2be720fd"
+    },
+    "gloss_back_roughness.png": {
+      "size": [
+        3072,
+        1937
+      ],
+      "channels": "R",
+      "sha256": "087a95641c128cb2f9e668a845d1fed873d93a544fd691e3e3c9ea3781809de0"
+    },
+    "gloss_edge_normal_opengl.png": {
+      "size": [
+        4096,
+        64
+      ],
+      "channels": "RGB",
+      "sha256": "a1f20a256209ee36f5c9816abf73370f60c766b3332e2fae8d23c1807b77bfb2"
+    },
+    "gloss_edge_roughness.png": {
+      "size": [
+        4096,
+        64
+      ],
+      "channels": "R",
+      "sha256": "7856ebaf7aa6a80a3cada3fcd96f6ad2e8d409b68ad47a97e6895a2435179c8d"
+    }
+  }
+}

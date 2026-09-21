@@ -22,6 +22,111 @@ struct PhysicsChecks {
     static func front(_ card: CardPhysics) { sameRotation(card.orientation, identity, "Expected front orientation") }
 
     static func main() {
+        var entrance = CardPhysics()
+        entrance.beginPreviewEntrance(at: 10)
+        front(entrance)
+        var previousAngle: Float = 0
+        for tick in 0...120 {
+            let p = Double(tick) / 120
+            entrance.advance(at: 10 + p * CardPhysics.previewEntranceDuration)
+            let angle = entrance.orientation.angle
+            precondition(angle.isFinite && angle < 32 * .pi / 180)
+            if tick <= 60 { precondition(angle + 0.00001 >= previousAngle) }
+            else { precondition(angle <= previousAngle + 0.00001, "The original enlargement arc is unchanged") }
+            previousAngle = angle
+        }
+        entrance.advance(at: 10 + CardPhysics.previewEntranceDuration + CardPhysics.previewSettleDuration / 2)
+        precondition(entrance.isEnteringPreview)
+        precondition(entrance.orientation.act(normal).x < 0, "The small follow-through rocks in the opposite direction")
+        precondition(entrance.orientation.angle > 2 * .pi / 180 && entrance.orientation.angle < 4 * .pi / 180,
+                     "One restrained 3D bounce, not another large turn")
+        entrance.advance(at: 10 + CardPhysics.previewEntranceDuration + CardPhysics.previewSettleDuration + 0.001)
+        front(entrance)
+        precondition(!entrance.isEnteringPreview)
+        entrance.advance(at: 11)
+        front(entrance)
+        precondition(!entrance.isEnteringPreview)
+        entrance.beginPreviewEntrance(at: 20)
+        entrance.advance(at: 20.25)
+        let touchedPose = entrance.orientation
+        entrance.begin(x: 100, y: 100, width: 300, height: 500, at: 20.25)
+        sameRotation(entrance.orientation, touchedPose, "Touch must take over without a pose jump")
+        entrance.advance(at: 21)
+        sameRotation(entrance.orientation, touchedPose, "Touch cancels the entrance animation")
+        entrance.reset()
+        front(entrance)
+
+        var rail = CardSelectionDrag()
+        rail.begin(selection: 0, at: 0)
+        precondition(rail.update(translation: 25.9, step: 52, count: 6, at: 0.1).isEmpty)
+        precondition(rail.selection == 0, "Before midpoint, release must return to the old card")
+        precondition(rail.update(translation: 26.1, step: 52, count: 6, at: 0.12) == [1])
+        precondition(rail.update(translation: 25.9, step: 52, count: 6, at: 0.14) == [0])
+        precondition(rail.update(translation: 26.1, step: 52, count: 6, at: 0.16) == [1],
+                     "Crossing the same midpoint in either direction emits a new haptic")
+        precondition(rail.update(translation: 600, step: 52, count: 6, at: 0.2).isEmpty)
+        precondition(rail.selection == 1 && rail.position == 1, "A fast full-width flick advances one stop only")
+        precondition(rail.update(translation: 600, step: 52, count: 6, at: 0.6).isEmpty,
+                     "Holding still must not consume discarded flick distance")
+        precondition(rail.update(translation: 704, step: 52, count: 6, at: 0.9) == [2, 3],
+                     "Continuing the same held gesture visits every neighbor in order")
+        precondition(rail.update(translation: 599, step: 52, count: 6, at: 1.1) == [2, 1])
+        rail.begin(selection: 5, at: 2)
+        precondition(rail.update(translation: -600, step: 52, count: 6, at: 2.1) == [4])
+        precondition(rail.selection == 4, "Reverse flick also advances just one")
+        rail.begin(selection: 0, at: 3)
+        precondition(rail.update(translation: 180, step: 362, count: 2, at: 3.1).isEmpty)
+        precondition(rail.update(translation: 182, step: 362, count: 2, at: 3.2) == [1])
+        precondition(rail.update(translation: 180, step: 362, count: 2, at: 3.3) == [0])
+
+        for width: CGFloat in [320, 375, 393, 402, 440] {
+            for count in [2, 5, 6] {
+                for index in 0..<count {
+                    let offset = CardColorRailMetrics.offset(index: index, width: width)
+                    precondition(CardColorRailMetrics.selection(offset: offset, width: width, count: count) == index)
+                    near(Double(CGFloat(index) * 52 + 20 - offset), Double(width / 2),
+                         "Every finish aligns to the stationary center on every device width")
+                }
+                precondition(CardColorRailMetrics.selection(offset: -10000, width: width, count: count) == 0)
+                precondition(CardColorRailMetrics.selection(offset: 10000, width: width, count: count) == count - 1)
+            }
+        }
+        near(Double(CardColorRailMetrics.clearance(distance: 0)), 0, "Selected circle stays centered")
+        near(Double(52 + CardColorRailMetrics.clearance(distance: 52)), 56, "First neighbor matches Figma")
+        near(Double(104 + CardColorRailMetrics.clearance(distance: 104)), 108, "Following circles retain 12 pt gaps")
+        near(Double(-52 + CardColorRailMetrics.clearance(distance: -52)), -56, "Clearance is symmetric")
+
+        var dismissal = CardPreviewDrag()
+        dismissal.begin(x: 100, y: 100)
+        dismissal.update(x: 102, y: 105)
+        precondition(dismissal.direction == .undecided, "Ignore touch jitter")
+        dismissal.update(x: 102, y: 120)
+        precondition(dismissal.direction == .dismiss)
+        near(Double(dismissal.translation), 20, "Downward travel follows the finger 1:1")
+        dismissal.update(x: 200, y: 90)
+        precondition(dismissal.direction == .dismiss, "Direction remains locked")
+        near(Double(dismissal.translation), 0, "Never move the card above its resting pose")
+        dismissal.begin(x: 100, y: 100)
+        dismissal.update(x: 120, y: 102)
+        dismissal.update(x: 120, y: 400)
+        precondition(dismissal.direction == .rotate, "A rotating gesture cannot accidentally dismiss")
+        for (height, center, viewport): (CGFloat, CGFloat, CGFloat) in
+            [(530, 310, 650), (440, 280, 600), (610, 355, 740)] {
+            let threshold = viewport - center - height * 0.25
+            precondition(!CardPreviewDrag.shouldDismiss(translation: threshold - 0.01,
+                cardHeight: height, centerY: center, viewportHeight: viewport), "Below 25% stays open")
+            precondition(CardPreviewDrag.shouldDismiss(translation: threshold,
+                cardHeight: height, centerY: center, viewportHeight: viewport), "Exactly 25% closes")
+            precondition(CardPreviewDrag.shouldDismiss(translation: threshold + 1,
+                cardHeight: height, centerY: center, viewportHeight: viewport))
+        }
+        precondition(!CardPreviewDrag.shouldDismiss(translation: 132.5, cardHeight: 530,
+            centerY: 310, viewportHeight: 650), "25% finger travel is not 25% hidden")
+        precondition(!CardPreviewDrag.shouldDismiss(translation: .nan, cardHeight: 530,
+            centerY: 310, viewportHeight: 650))
+        precondition(!CardPreviewDrag.shouldDismiss(translation: 200, cardHeight: 0,
+            centerY: 310, viewportHeight: 650))
+
         var card = CardPhysics()
         card.begin(x: 37, y: 82, width: 320, height: 200, at: 0)
         card.update(x: 37, y: 82)
@@ -112,25 +217,24 @@ struct PhysicsChecks {
         precondition(screenNormal.x > 0 && abs(screenNormal.y) < 0.000001,
                      "Screen-horizontal dragging must not introduce vertical tilt")
 
-        // Two fingers control all three screen-space rotation axes. A quarter
-        // twist rotates the card's long edge from horizontal to vertical.
+        // Two fingers behave like a photo: their centroid is handled by CardZoom,
+        // while only the actual twist changes the card orientation. UIKit reports
+        // a clockwise-positive angle, which is negated for scene coordinates.
         card.reset()
-        card.beginFree(x: 100, y: 100, width: 200, height: 200, at: 0)
-        card.updateFree(x: 100, y: 100, roll: .pi / 2)
-        near(card.orientation.act(SIMD3(1, 0, 0)), SIMD3(0, 1, 0),
-             "Two-finger twist must rotate the card in-plane to horizontal/vertical layouts")
-        card.reset()
-        card.beginFree(x: 100, y: 100, width: 200, height: 200, at: 0)
-        card.updateFree(x: 150, y: 150, roll: .pi / 4)
-        let freelyRotated = card.orientation
-        precondition(abs(freelyRotated.imag.x) > 0.01 && abs(freelyRotated.imag.y) > 0.01 &&
-                     abs(freelyRotated.imag.z) > 0.01,
-                     "Two-finger centroid and twist must combine pitch, yaw and roll")
-        card.end(at: 1)
-        card.advance(at: 4.3)
-        precondition(simd_length(card.orientation.vector - freelyRotated.vector) > 0.01,
-                     "Free orientation must animate back during the 600ms return")
-        card.advance(at: 4.601)
+        card.begin(x: 0, y: 0, width: 320, height: 200, at: 0)
+        card.update(x: 96, y: 0)
+        card.end(at: 0, scheduleReturn: false)
+        card.beginPhotoTransform(at: 0)
+        card.updatePhotoTransform(roll: .pi / 2)
+        let photoRotated = card.orientation
+        precondition(abs(photoRotated.imag.y) > 0.01 && abs(photoRotated.imag.z) > 0.01,
+                     "Photo transform must retain the incoming yaw and follow the finger twist")
+        card.end(at: 1, scheduleReturn: false)
+        card.returnToDefault(at: 1, duration: CardZoom.returnDuration)
+        card.advance(at: 1.15)
+        precondition(simd_length(card.orientation.vector - photoRotated.vector) > 0.01,
+                     "Photo orientation must animate back together with zoom")
+        card.advance(at: 1.301)
         front(card)
 
         // Test a focus off-centre and away from the object's centre-depth, as on
@@ -172,6 +276,6 @@ struct PhysicsChecks {
         near(zoom.translation, .zero, "Zoom return restores the original position")
         precondition(!zoom.isReturning && !zoom.isPinching)
 
-        print("PASS: one-finger Y-only yaw, two-finger free pitch/yaw/roll, horizontal layout, anchored simultaneous zoom, 3s deadline, 600ms return, cancellation, regrab, full turns, event rate, zoom limits and reset")
+        print("PASS: one-finger Y-only yaw, photo-like two-finger roll with immediate coordinated reset, horizontal layout, anchored simultaneous zoom and pan, 3s deadline, 600ms drag return, cancellation, regrab, full turns, event rate, zoom limits and reset")
     }
 }
