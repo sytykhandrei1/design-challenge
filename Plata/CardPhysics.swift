@@ -37,6 +37,21 @@ struct CardSelectionDrag {
     }
 }
 
+/// Type pages need less travel than the colour rail and accept a short flick.
+/// Keep this policy separate so colour selection never gains release inertia.
+enum CardTypePaging {
+    static func dragStep(_ pageWidth: CGFloat) -> CGFloat { pageWidth * 0.62 }
+
+    static func releaseSelection(position: CGFloat, selection: Int, translation: CGFloat,
+                                 predictedExtra: CGFloat, pageWidth: CGFloat, count: Int) -> Int {
+        guard count > 0, pageWidth > 0, position.isFinite, translation.isFinite,
+              predictedExtra.isFinite, abs(translation) >= 18,
+              abs(predictedExtra) >= 24 else { return selection }
+        let projected = position + predictedExtra / dragStep(pageWidth)
+        return min(max(Int(projected.rounded()), max(selection - 1, 0)), min(selection + 1, count - 1))
+    }
+}
+
 /// The native scroll view snaps at 52 pt. Its neighboring circles receive an
 /// extra 4 pt of clearance around the stationary 48 pt selection ring (Figma).
 enum CardColorRailMetrics {
@@ -92,8 +107,8 @@ struct CardPreviewDrag {
 /// One finger controls screen yaw. A two-finger gesture behaves like a photo:
 /// pinch to scale, move the centroid to pan and twist to roll, without accidental
 /// pitch/yaw caused by the two fingers moving by slightly different amounts.
-/// A one-finger release holds the exact orientation for three seconds, then returns
-/// to the front in 600 ms. A released photo transform can request an immediate
+/// Preview releases opt into a bounded directional coast to a complete front-facing
+/// turn. Legacy callers retain their delayed return. A photo transform requests an immediate
 /// coordinated return with zoom. Its clock is injected for deterministic tests.
 struct CardPhysics {
     static let previewEntranceDuration = 0.72
@@ -104,19 +119,31 @@ struct CardPhysics {
     private var rotation = identity
     private var lastX: Double?
     private var gestureWidth = 1.0
+    private var gestureResponse = 1.0
     private var freeStartPoint: SIMD2<Double>?
     private var freeGestureSize = SIMD2<Double>(repeating: 1)
     private var freeStartRotation = identity
     private var returning: (start: Double, from: simd_quatd, duration: Double)?
     private var entranceStart: Double?
+    static let previewDragResponse = 0.5
+    static let minimumCoastSpeed = 1.8
+    static let maximumCoastSpeed = 2.8 // radians/sec; only intentional flicks coast
+    static let minimumFlickVelocity = 3.0 // screen-width-normalized radians/sec before drag weighting
+    private var coast: (start: Double, yaw: Double, travel: Double, duration: Double, residual: simd_quatd)?
+    private var sampleTime: Double?
+    private var lastMovementTime: Double?
+    private var releaseVelocity = 0.0
+    private var lastDirection = 0.0
+    private var gestureTravel = 0.0
 
     var orientation: simd_quatf {
         simd_quatf(ix: Float(rotation.imag.x), iy: Float(rotation.imag.y),
                    iz: Float(rotation.imag.z), r: Float(rotation.real))
     }
     var isDragging: Bool { lastX != nil || freeStartPoint != nil }
-    var returnStartTime: Double? { returning?.start }
-    var hasAutomaticReturn: Bool { returning != nil }
+    var returnStartTime: Double? { coast?.start ?? returning?.start }
+    var hasAutomaticReturn: Bool { returning != nil || coast != nil }
+    var isCoasting: Bool { coast != nil }
     var isEnteringPreview: Bool { entranceStart != nil }
 
     /// Preserve the original enlargement/rotation arc, then give the card one
@@ -127,22 +154,45 @@ struct CardPhysics {
         entranceStart = time
     }
 
-    mutating func begin(x: Double, y: Double, width: Double, height: Double, at time: Double) {
+    mutating func begin(x: Double, y: Double, width: Double, height: Double, at time: Double,
+                        response: Double = 1) {
         guard x.isFinite, y.isFinite, width.isFinite, height.isFinite,
-              width > 0, height > 0, time.isFinite else { return }
+              width > 0, height > 0, time.isFinite, response.isFinite, response > 0 else { return }
         interruptAutomaticReturn(at: time)
         lastX = x
         freeStartPoint = nil
         gestureWidth = width
+        gestureResponse = response
+        sampleTime = time
+        lastMovementTime = nil
+        releaseVelocity = 0
+        lastDirection = 0
+        gestureTravel = 0
     }
 
-    mutating func update(x: Double, y: Double) {
+    mutating func update(x: Double, y: Double, at time: Double? = nil) {
         guard let previous = lastX, x.isFinite, y.isFinite else { return }
-        let increment = (x - previous) / gestureWidth * .pi
+        let increment = (x - previous) / gestureWidth * .pi * gestureResponse
         guard increment.isFinite else { return }
         lastX = x
+        if let time, time.isFinite, let previousTime = sampleTime, time > previousTime {
+            let dt = time - previousTime
+            let velocity = increment / dt
+            let blend = 1 - exp(-dt / 0.07)
+            // A reversal should launch in the last intentional direction, not
+            // replay momentum from the previous stroke.
+            if increment * releaseVelocity < 0 { releaseVelocity = 0 }
+            releaseVelocity += (velocity - releaseVelocity) * blend
+            sampleTime = time
+            if abs(increment) > 0.0001 { lastMovementTime = time }
+        }
+        if abs(increment) > 0.0001 {
+            lastDirection = increment > 0 ? 1 : -1
+            gestureTravel += abs(increment)
+        }
         // Y input is intentionally ignored. Rightward screen movement turns the
-        // front surface right around +Y; one screen card width gives 180 degrees.
+        // front surface right around +Y. Preview halves the direct response to
+        // give the card weight; legacy callers retain 180 degrees per width.
         let yaw = simd_quatd(angle: increment, axis: SIMD3<Double>(0, 1, 0))
         rotation = simd_normalize(yaw * rotation)
     }
@@ -192,6 +242,46 @@ struct CardPhysics {
         if scheduleReturn { scheduleAutomaticReturn(at: time) }
     }
 
+    /// Complete the revolution in the stroke's direction, not the quaternion's
+    /// shortest path. Stop at the FIRST front-facing pose; stronger flicks change
+    /// speed, not the number of revolutions or the terminal orientation.
+    mutating func endWithInertia(at time: Double) {
+        guard time.isFinite else { return }
+        lastX = nil
+        freeStartPoint = nil
+        returning = nil
+        entranceStart = nil
+        coast = nil
+        guard gestureTravel > 0.0001, lastDirection != 0 else {
+            return
+        }
+        let age = max(0, time - (lastMovementTime ?? time))
+        let velocity = abs(releaseVelocity) * exp(-age / 0.18) / gestureResponse
+        // A gentle inspection (or a fast drag held still before release) must
+        // stay exactly where the user leaves it, with no delayed auto-return.
+        guard velocity >= Self.minimumFlickVelocity else { return }
+        let front = rotation.act(SIMD3<Double>(0, 0, 1))
+        let yaw = atan2(front.x, front.z)
+        let turn = 2 * Double.pi
+        let direction = lastDirection
+        var distance = (-direction * yaw).truncatingRemainder(dividingBy: turn)
+        if distance < 0 { distance += turn }
+        // At an already completed turn there is nothing left to rotate. Do not
+        // add an unwanted revolution when release happens exactly on the front.
+        if min(distance, turn - distance) < 0.000001 {
+            returnToDefault(at: time, duration: Self.returnDuration)
+            return
+        }
+        let strength = min(velocity / 7, 1)
+        let speed = Self.minimumCoastSpeed + (Self.maximumCoastSpeed - Self.minimumCoastSpeed) * strength
+        // Integral of v(t)=v0*(1-u²): continuous monotone slowdown, exact zero
+        // terminal velocity. Keeping yaw unwrapped preserves full revolutions.
+        let duration = 1.5 * distance / speed
+        let yawRotation = simd_quatd(angle: yaw, axis: SIMD3<Double>(0, 1, 0))
+        coast = (time, yaw, direction * distance, duration,
+                 simd_normalize(yawRotation.inverse * rotation))
+    }
+
     mutating func scheduleAutomaticReturn(at time: Double) {
         guard time.isFinite else { return }
         let distance = min(simd_length(rotation.vector - Self.identity.vector),
@@ -210,6 +300,7 @@ struct CardPhysics {
         guard time.isFinite, duration.isFinite, duration > 0 else { return }
         lastX = nil
         freeStartPoint = nil
+        coast = nil
         let distance = min(simd_length(rotation.vector - Self.identity.vector),
                            simd_length(rotation.vector + Self.identity.vector))
         guard distance > 0.0000001 else {
@@ -226,9 +317,20 @@ struct CardPhysics {
         advance(at: time)
         returning = nil
         entranceStart = nil
+        coast = nil
     }
 
     mutating func advance(at time: Double) {
+        if let state = coast, time.isFinite {
+            let u = min(max((time - state.start) / state.duration, 0), 1)
+            let progress = 1.5 * u - 0.5 * u * u * u
+            let yaw = simd_quatd(angle: state.yaw + state.travel * progress,
+                                 axis: SIMD3<Double>(0, 1, 0))
+            let settle = u * u * (3 - 2 * u)
+            rotation = simd_normalize(yaw * simd_slerp(state.residual, Self.identity, settle))
+            if u >= 1 { rotation = Self.identity; coast = nil }
+            return
+        }
         if let start = entranceStart, time.isFinite {
             let elapsed = max(time - start, 0)
             let p = min(elapsed / Self.previewEntranceDuration, 1)
@@ -254,6 +356,12 @@ struct CardPhysics {
         freeStartPoint = nil
         returning = nil
         entranceStart = nil
+        coast = nil
+        sampleTime = nil
+        lastMovementTime = nil
+        releaseVelocity = 0
+        gestureTravel = 0
+        lastDirection = 0
     }
 }
 

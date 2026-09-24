@@ -315,7 +315,7 @@ final class CardFlowUITests: XCTestCase {
         let ringFrame = ring.frame
         let start = card.coordinate(withNormalizedOffset: CGVector(dx: 0.9, dy: 0.5))
         let plasticWidth = app.frame.width - 56
-        let midpoint = (plasticWidth + 16) / 2
+        let midpoint = (plasticWidth + 16) * 0.62 / 2
         start.press(forDuration: 0.08, thenDragTo: start.withOffset(CGVector(dx: -(midpoint - 3), dy: 0)),
                     withVelocity: .slow, thenHoldForDuration: 0.1)
         XCTAssertTrue(waitForLabel(of: card, containing: "Plastic"))
@@ -337,6 +337,48 @@ final class CardFlowUITests: XCTestCase {
         XCTAssertTrue((card.value as? String ?? "").contains("haptics:2"))
         XCTAssertEqual(subtitle.label, "Plata—matte grey, quiet and clean")
         attach("gallery-plastic-final", app)
+    }
+
+    @MainActor
+    func testCobaltoHasNoWhiteInspectionHotspot() throws {
+        let app = launchCardSelection()
+        let card = activeCard(in: app)
+        let ring = app.descendants(matching: .any).matching(identifier: "colorSelectionFrame").firstMatch
+        app.buttons["cardColor2"].tap()
+        app.buttons["cardColor4"].tap()
+        XCTAssertTrue(waitForValue(of: ring, containing: "Cobalto, 5 of 5"))
+        Thread.sleep(forTimeInterval: 1)
+        let image = try XCTUnwrap(card.screenshot().image.cgImage)
+        // The open blue area inside L, excluding the printed letter itself.
+        let rect = CGRect(x: Double(image.width) * 0.29, y: Double(image.height) * 0.055,
+                          width: Double(image.width) * 0.04, height: Double(image.height) * 0.05)
+        let patch = try XCTUnwrap(image.cropping(to: rect))
+        var pixel = [UInt8](repeating: 0, count: 4)
+        let context = try XCTUnwrap(CGContext(data: &pixel, width: 1, height: 1, bitsPerComponent: 8,
+                    bytesPerRow: 4, space: CGColorSpaceCreateDeviceRGB(),
+                    bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue))
+        context.interpolationQuality = .high
+        context.draw(patch, in: CGRect(x: 0, y: 0, width: 1, height: 1))
+        XCTAssertLessThan(Int(pixel[0]), 120, "Cobalto must stay blue here, not clip to a white glow")
+        XCTAssertGreaterThan(Int(pixel[2]) - Int(pixel[0]), 40, "Original blue substrate remains visible")
+        attach("cobalto-no-hotspot", app)
+    }
+
+    @MainActor
+    func testShortTypeFlickCompletesInBothDirections() {
+        let app = launchCardSelection()
+        XCTAssertTrue(app.staticTexts["Tap for a closer look"].exists)
+        let card = activeCard(in: app)
+        let start = card.coordinate(withNormalizedOffset: CGVector(dx: 0.75, dy: 0.5))
+        start.press(forDuration: 0.05, thenDragTo: start.withOffset(CGVector(dx: -75, dy: 0)),
+                    withVelocity: XCUIGestureVelocity(1200), thenHoldForDuration: 0)
+        XCTAssertTrue(waitForLabel(of: card, containing: "Metal"), "Short fast flick must complete to Metal")
+        let reverse = card.coordinate(withNormalizedOffset: CGVector(dx: 0.25, dy: 0.5))
+        reverse.press(forDuration: 0.05, thenDragTo: reverse.withOffset(CGVector(dx: 75, dy: 0)),
+                      withVelocity: XCUIGestureVelocity(1200), thenHoldForDuration: 0)
+        XCTAssertTrue(waitForLabel(of: card, containing: "Plastic"), "Short reverse flick must complete to Plastic")
+        XCTAssertTrue((card.value as? String ?? "").contains("haptics:2"))
+        attach("type-short-flick-final", app)
     }
 
     @MainActor
@@ -484,12 +526,12 @@ final class CardFlowUITests: XCTestCase {
     }
 
     @MainActor
-    func testHorizontalRotationAndTimedReturn() throws {
+    func testHorizontalRotationAndInertialReturn() throws {
         let app = launchCardSelection()
         let card = activeCard(in: app)
         card.tap()
         XCTAssertTrue(app.staticTexts["Card preview"].waitForExistence(timeout: 3))
-        Thread.sleep(forTimeInterval: 0.8)
+        Thread.sleep(forTimeInterval: 1.2)
         let initial = card.screenshot().pngRepresentation
 
         card.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.3))
@@ -504,17 +546,23 @@ final class CardFlowUITests: XCTestCase {
             .press(forDuration: 0.1,
                    thenDragTo: card.coordinate(withNormalizedOffset: CGVector(dx: 0.42, dy: 0.5)),
                    withVelocity: .slow, thenHoldForDuration: 0.05)
-        let partial = card.screenshot().pngRepresentation
-        XCTAssertNotEqual(partial, initial, "Horizontal movement must rotate the card around Y")
-        Thread.sleep(forTimeInterval: 0.7)
-        XCTAssertEqual(card.screenshot().pngRepresentation, partial,
-                       "The released angle is retained during the three-second hold")
-        attach("interaction-01-held-angle", app)
-
-        Thread.sleep(forTimeInterval: 3.8)
+        // XCTest can wait for animation idleness before returning from the
+        // synthesized gesture. Direction/speed/travel are checked with the
+        // deterministic physics clock; the recording verifies visible motion.
+        let gentlyRotated = card.screenshot().pngRepresentation
+        XCTAssertNotEqual(gentlyRotated, initial, "A gentle drag changes the pose")
+        Thread.sleep(forTimeInterval: 4)
+        XCTAssertEqual(card.screenshot().pngRepresentation, gentlyRotated,
+                       "Gentle release stays still, including beyond the old return delay")
+        attach("inertia-gentle-held", app)
+        card.coordinate(withNormalizedOffset: CGVector(dx: 0.3, dy: 0.5))
+            .press(forDuration: 0.05,
+                   thenDragTo: card.coordinate(withNormalizedOffset: CGVector(dx: 0.8, dy: 0.5)),
+                   withVelocity: XCUIGestureVelocity(1400), thenHoldForDuration: 0)
+        Thread.sleep(forTimeInterval: 11)
         XCTAssertEqual(card.screenshot().pngRepresentation, initial,
-                       "After the hold and 600ms animation the card returns to the front")
-        attach("interaction-02-returned", app)
+                       "A stronger opposite flick also settles front-facing")
+        attach("inertia-strong-front", app)
     }
 
     @MainActor

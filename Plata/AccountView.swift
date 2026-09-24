@@ -1,5 +1,6 @@
 import SwiftUI
 import UIKit
+import Combine
 
 /// Three review entry points: new-card sheet, gallery via Withdraw, Metal via Transfer.
 struct AccountTabsView: View {

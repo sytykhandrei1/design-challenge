@@ -21,7 +21,119 @@ struct PhysicsChecks {
     }
     static func front(_ card: CardPhysics) { sameRotation(card.orientation, identity, "Expected front orientation") }
 
+    static func checkPreviewInertia() {
+        func stroke(direction: Double, duration: Double, hold: Double = 0) -> CardPhysics {
+            var card = CardPhysics()
+            card.begin(x: 0, y: 0, width: 300, height: 500, at: 0,
+                       response: CardPhysics.previewDragResponse)
+            for step in 1...20 {
+                card.update(x: direction * 60 * Double(step) / 20, y: 0,
+                            at: duration * Double(step) / 20)
+            }
+            let released = card.orientation
+            card.endWithInertia(at: duration + hold)
+            card.advance(at: duration + hold)
+            sameRotation(card.orientation, released, "No orientation jump on release")
+            precondition(!card.isDragging)
+            return card
+        }
+        func measure(_ input: CardPhysics, start: Double, direction: Double, fps: Int) -> (Double, Double) {
+            var card = input
+            var previous = atan2(Double(card.orientation.act(normal).x), Double(card.orientation.act(normal).z))
+            var distance = 0.0
+            var priorSpeed = CardPhysics.maximumCoastSpeed
+            for tick in 1...fps * 15 {
+                card.advance(at: start + Double(tick) / Double(fps))
+                let face = card.orientation.act(normal)
+                let angle = atan2(Double(face.x), Double(face.z))
+                var delta = angle - previous
+                if delta > .pi { delta -= 2 * .pi }
+                if delta < -.pi { delta += 2 * .pi }
+                let speed = direction * delta * Double(fps)
+                precondition(speed >= -0.0001, "Never reverse toward the shortest path")
+                precondition(speed <= CardPhysics.maximumCoastSpeed + 0.001, "Even strongest flick is speed limited")
+                precondition(speed <= priorSpeed + 0.001, "Coast slows down monotonically")
+                priorSpeed = speed
+                distance += direction * delta
+                previous = angle
+                if !card.isCoasting {
+                    front(card)
+                    precondition(!card.hasAutomaticReturn)
+                    return (distance, Double(tick) / Double(fps))
+                }
+            }
+            preconditionFailure("Coast must finish, never loop")
+        }
+        for direction in [-1.0, 1.0] {
+            for input in [stroke(direction: direction, duration: 0.7),
+                          stroke(direction: direction, duration: 0.055, hold: 0.5)] {
+                var held = input
+                let released = held.orientation
+                precondition(!held.hasAutomaticReturn, "Gentle or held releases must not move automatically")
+                held.advance(at: 30)
+                sameRotation(held.orientation, released, "Weak rotation stays at the exact released pose")
+            }
+            let medium = stroke(direction: direction, duration: 0.14)
+            let strong = stroke(direction: direction, duration: 0.055)
+            precondition(medium.isCoasting && strong.isCoasting)
+            let a = measure(medium, start: 0.14, direction: direction, fps: 120)
+            let b = measure(strong, start: 0.055, direction: direction, fps: 120)
+            precondition(abs(a.0 + 0.1 * .pi - 2 * .pi) < 0.0001, "Half-speed drag plus coast completes exactly one turn")
+            precondition(abs(b.0 - a.0) < 0.0001 && b.1 < a.1,
+                         "Strong stroke reaches the SAME front sooner, without an extra turn")
+            let coarse = measure(strong, start: 0.055, direction: direction, fps: 30)
+            precondition(abs(coarse.0 - b.0) < 0.0001, "Travel is frame-rate independent")
+            var interrupted = strong
+            interrupted.advance(at: 0.8)
+            let visible = interrupted.orientation
+            interrupted.begin(x: 10, y: 0, width: 300, height: 500, at: 0.8)
+            sameRotation(interrupted.orientation, visible, "Regrab retains the exact presented pose")
+            interrupted.advance(at: 20)
+            sameRotation(interrupted.orientation, visible, "Touch stops the coast immediately")
+            precondition(!interrupted.isCoasting)
+            interrupted.beginPhotoTransform(at: 20)
+            interrupted.returnToDefault(at: 20, duration: 0.3)
+            interrupted.advance(at: 20.31)
+            front(interrupted)
+        }
+        var tap = CardPhysics()
+        tap.begin(x: 0, y: 0, width: 300, height: 500, at: 0)
+        tap.endWithInertia(at: 1)
+        precondition(!tap.isCoasting, "A stationary tap never spins")
+        var reversal = stroke(direction: 1, duration: 0.7)
+        reversal.begin(x: 100, y: 0, width: 300, height: 500, at: 0.7)
+        reversal.update(x: 120, y: 0, at: 0.8)
+        reversal.update(x: 60, y: 0, at: 0.85)
+        reversal.endWithInertia(at: 0.85)
+        _ = measure(reversal, start: 0.85, direction: -1, fps: 60)
+        for direction in [-1.0, 1.0] {
+            for turns in [0.01, 0.49, 0.51, 0.99, 1.2, 2.7] {
+                var card = CardPhysics()
+                card.begin(x: 0, y: 0, width: 300, height: 500, at: 0,
+                           response: CardPhysics.previewDragResponse)
+                card.update(x: direction * (turns * 1200 - 60), y: 0, at: 0.01)
+                card.update(x: direction * turns * 1200, y: 0, at: 0.065)
+                card.endWithInertia(at: 0.065)
+                precondition(card.isCoasting)
+                let result = measure(card, start: 0.065, direction: direction, fps: 60)
+                precondition(abs(result.0 - (ceil(turns) - turns) * 2 * .pi) < 0.0001,
+                             "Always stop on the first front in the stroke direction")
+            }
+            var completed = CardPhysics()
+            completed.begin(x: 0, y: 0, width: 300, height: 500, at: 0,
+                            response: CardPhysics.previewDragResponse)
+            completed.update(x: direction * 1200, y: 0, at: 1)
+            completed.endWithInertia(at: 1)
+            precondition(!completed.isCoasting, "A completed turn must not launch another")
+            front(completed)
+        }
+        near(CardPhysics.minimumCoastSpeed, 1.8, "Minimum coast speed is doubled")
+        near(CardPhysics.maximumCoastSpeed, 2.8, "Maximum coast speed is doubled")
+        print("PASS: weak/held release stays still, strong flick only, weighted drag, first-front stop, stronger=faster, 30/120Hz, reversal, regrab and pinch takeover")
+    }
+
     static func main() {
+        checkPreviewInertia()
         var entrance = CardPhysics()
         entrance.beginPreviewEntrance(at: 10)
         front(entrance)
@@ -57,6 +169,17 @@ struct PhysicsChecks {
         front(entrance)
 
         var rail = CardSelectionDrag()
+        near(Double(CardTypePaging.dragStep(362)), 224.44, "Types commit at 112pt rather than 181pt")
+        precondition(CardTypePaging.releaseSelection(position: 0.2, selection: 0, translation: 45,
+                     predictedExtra: 100, pageWidth: 362, count: 2) == 1, "Short forward flick is completed")
+        precondition(CardTypePaging.releaseSelection(position: 0.8, selection: 1, translation: -45,
+                     predictedExtra: -100, pageWidth: 362, count: 2) == 0, "Short reverse flick is completed")
+        precondition(CardTypePaging.releaseSelection(position: 0.2, selection: 0, translation: 45,
+                     predictedExtra: 0, pageWidth: 362, count: 2) == 0, "Slow incomplete drag still cancels")
+        precondition(CardTypePaging.releaseSelection(position: 0.05, selection: 0, translation: 8,
+                     predictedExtra: 200, pageWidth: 362, count: 2) == 0, "Touch jitter is not a flick")
+        precondition(CardTypePaging.releaseSelection(position: 1, selection: 1, translation: 600,
+                     predictedExtra: 900, pageWidth: 362, count: 2) == 1, "An outward flick cannot bounce to the other type")
         rail.begin(selection: 0, at: 0)
         precondition(rail.update(translation: 25.9, step: 52, count: 6, at: 0.1).isEmpty)
         precondition(rail.selection == 0, "Before midpoint, release must return to the old card")

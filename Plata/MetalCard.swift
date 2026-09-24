@@ -567,9 +567,19 @@ final class MetalCardSurface: UIView, UIGestureRecognizerDelegate {
             if twoFingerActive {
                 finishTwoFinger(at: time)
             } else {
+                let coasts = quarterTurned && previewDrag.direction == .rotate
                 finishPreviewDrag(cancelled: false)
-                rotation.end(at: time)
-                armReturnTimer()
+                if coasts {
+                    if UIAccessibility.isReduceMotionEnabled {
+                        rotation.returnToDefault(at: time, duration: 0.3)
+                    } else {
+                        rotation.endWithInertia(at: time)
+                    }
+                    startAnimationLink()
+                } else {
+                    rotation.end(at: time, scheduleReturn: !quarterTurned)
+                    if !quarterTurned { armReturnTimer() }
+                }
             }
         case .cancelled, .failed:
             if twoFingerActive {
@@ -590,7 +600,8 @@ final class MetalCardSurface: UIView, UIGestureRecognizerDelegate {
         previewDrag.begin(x: p.x, y: p.y)
         let screenBounds = convert(bounds, to: window)
         rotation.begin(x: p.x, y: p.y, width: max(screenBounds.width, 1),
-                       height: max(screenBounds.height, 1), at: time)
+                       height: max(screenBounds.height, 1), at: time,
+                       response: quarterTurned ? CardPhysics.previewDragResponse : 1)
         contactNeedsRebase = false
     }
 
@@ -604,7 +615,7 @@ final class MetalCardSurface: UIView, UIGestureRecognizerDelegate {
             }
             guard previewDrag.direction == .rotate else { return }
         }
-        rotation.update(x: p.x, y: p.y)
+        rotation.update(x: p.x, y: p.y, at: CACurrentMediaTime())
         renderOrientation()
     }
 

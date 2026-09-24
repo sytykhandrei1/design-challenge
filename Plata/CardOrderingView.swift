@@ -61,7 +61,11 @@ struct CardOrderingView: View {
         }
         .softNavigationScrollEdge()
         .onChange(of: typeContact) { _, touching in
-            if !touching { finishTypeDrag() }
+            if !touching {
+                // GestureState can reset before onEnded. Let release projection
+                // commit first; this fallback only settles cancelled gestures.
+                DispatchQueue.main.async { if !typeContact { finishTypeDrag() } }
+            }
         }
     }
 
@@ -102,7 +106,7 @@ struct CardOrderingView: View {
                     Image(systemName: "hand.tap")
                         .font(.subheadline.weight(.semibold))
                         .frame(width: 16, height: 18)
-                    Text("Tap to see up close")
+                    Text("Tap for a closer look")
                         .font(.subheadline.weight(.semibold))
                 }
                 .foregroundStyle(LinearGradient(stops: [
@@ -231,7 +235,7 @@ struct CardOrderingView: View {
                     selectionFeedback.prepare()
                 }
                 let crossings = session.update(translation: -value.translation.width,
-                                               step: step, count: categories.count,
+                                               step: CardTypePaging.dragStep(step), count: categories.count,
                                                at: value.time.timeIntervalSinceReferenceDate)
                 typeSession = session
                 var instant = Transaction()
@@ -239,13 +243,25 @@ struct CardOrderingView: View {
                 withTransaction(instant) { typePosition = session.position }
                 for next in crossings { selected = next; selectionHaptic() }
             }
-            .onEnded { _ in finishTypeDrag() }
+            .onEnded { value in
+                if let session = typeSession {
+                    let next = CardTypePaging.releaseSelection(
+                        position: session.position, selection: selected,
+                        translation: -value.translation.width,
+                        predictedExtra: -(value.predictedEndTranslation.width - value.translation.width),
+                        pageWidth: step, count: categories.count)
+                    if next != selected { selected = next; selectionHaptic() }
+                }
+                finishTypeDrag()
+            }
     }
 
     private func finishTypeDrag() {
         guard typeSession != nil else { return }
         typeSession = nil
-        withAnimation(transition) { typePosition = CGFloat(selected) }
+        withAnimation(.easeOut(duration: reduceMotion ? 0.16 : 0.22)) {
+            typePosition = CGFloat(selected)
+        }
     }
 
     private func select(_ index: Int) {

@@ -108,7 +108,7 @@ struct PlataPlasticCardView: UIViewRepresentable {
             let lightChanged = next.light != config.light
             config = next
             if poseChanged { yaw = next.pose.yaw; pitch = next.pose.pitch; view?.zoomFactor = 1; applyPose() }
-            if lightChanged { applyLight() }
+            if lightChanged || skinChanged { applyLight() }
             if detailsChanged || skinChanged { refreshAppearance() }
         }
 
@@ -174,7 +174,10 @@ struct PlataPlasticCardView: UIViewRepresentable {
         private func applyLight() {
             view?.environment.lighting.intensityExponent = config.light.intensity
             key?.light.intensity = config.light == .studio ? 180 : (config.light == .soft ? 60 : 0)
-            inspectionLight?.light.intensity = config.light == .studio ? 55 : 0
+            // On glossy Cobalto this tiny emitter burns a white spot into the
+            // open part of the L. Keep its original gloss/clearcoat and studio
+            // HDR reflections; omit only the point-source inspection highlight.
+            inspectionLight?.light.intensity = config.light == .studio && config.skin != .cobalto ? 55 : 0
             updateStatus()
         }
         private func applyPose() {

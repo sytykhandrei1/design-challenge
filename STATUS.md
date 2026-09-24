@@ -1,4 +1,32 @@
-# Current status — 21 September 2026
+# Current status — 24 September 2026
+
+## Latest phone install and authorized publication
+
+- User explicitly requested installation and then publication (“Заливай на гит изменения”). Signed Release containing all current inertia/gallery changes BUILD SUCCEEDED, work/gallery-polish-device-release.log.
+- Diagnosed actual install failure: CoreDevice log recorded interrupted Xcode Debug transfer (Broken pipe), followed by AppInstallationBinaryDeltas metadata mismatch (expected installed DB sequence3244, cached3228). Phone was unlocked, Developer Mode enabled, connected over localNetwork; this failure was not a compilation/signing error. Xcode run was already stopped. Moved only the validated Plata install cache to /tmp/plata-install-cache.GTmUk4 for recovery, without uninstalling the app or clearing user data.
+- Retry confirmed App installed in11.918s, DB sequence3268; work/gallery-polish-install-retry.json. Launch without debugger SUCCEEDED, work/gallery-polish-phone-launch.json. Fresh Release now on iPhone And. This confirms install/launch, not a new physical-device performance profile.
+- Publishing the current10 changed source/test/doc files as a review checkpoint to main with the verified sytykhandrei1 account. Prior “no install/push” notes below describe their historical stages. Metal stationary-refresh limitation and intermittent colour UI test remain documented, not claimed fixed.
+
+## Gallery polish — current local review
+
+- Hint changed to “Tap for a closer look”. Physical type drag uses62% of the old travel (midpoint≈112pt instead of181pt at402pt width), release projection completes short flicks,220ms ease-out without overshoot. GestureState cancellation fallback defers until onEnded can resolve the target. Colour rail physics is unchanged.
+- Reproduced Cobalto white hotspot in the open area of L; baseline screenshot screen-task work/cobalto-before.png. Disabled only Cobalto's inspection PointLight and refresh lighting on skin changes. Original substrate/print materials, gloss, clearcoat, HDR, textures and geometry untouched. Neighbor renderer owner confirms idle/no overlapping changes. Baseline Plastic five-finish test PASS. Final app build, hotspot pixel assertion,75pt type flick both ways and reduced-midpoint/subtitle/haptics tests PASS (/tmp/plata-gallery-polish01.xcresult). Digital colour held-drag regression initially failed during a slow99s run; identical isolated repeat PASS in24s with no code/test changes (/tmp/plata-gallery-polish-color02.xcresult); retain that intermittent test failure in history. Physics and diff checks PASS. Actual Cobalto before/after visually inspected; review outputs/cobalto-fixed.png. No install, commit or push.
+
+## Flick-only first-front stop — latest local revision
+
+- Latest user refinement: gentle drags stay at the exact released pose indefinitely. Only a flick at filtered normalized release velocity≥3rad/s coasts; holding before release dissipates it. Preview drag keeps0.5 response; coast doubled from the previous0.9…1.4 to1.8…2.8rad/s. Stronger flicks are faster but never add turns. Stops at the FIRST front in stroke direction, with exact default orientation; a release already at front does not restart spinning. Preview taps no longer arm the legacy delayed return.
+- Physics checks PASS: weak/held gestures remain still, qualifying flicks have identical travel and stronger reaches front sooner; both directions, releases before/after half/full turns, multiple manually dragged turns, exact-front release, frame-rate independence and existing gesture regression checks. Final app build and flick-only UI test PASS (/tmp/plata-flick-inertia02.xcresult): weak release holds its non-default image beyond the old return delay; strong opposite flick ends pixel-identical to initial front. Recorded motion visually checked (held tilt, back, approaching front, exact upright endpoint);18s review outputs/flick-only-preview.mp4. No new phone install, commit or push.
+
+## Phone build / installation attempt — 24 September 2026
+
+- Added the explicit Combine import to AccountView, resolving Xcode's missing-import diagnostics. Fresh signed iPhone Release BUILD SUCCEEDED (screen-task work/inertia-device-release.log); /tmp/plata-account-perf-release-build now contains the current inertia changes.
+- User authorized installing and launching this local build. iPhone And is paired and connected over USB with Developer Mode enabled. Installation attempts timed out at 60 and 120 seconds without a success receipt. Device lock-state checks report passcodeRequired=true; asked the user to unlock and keep the screen on. Installation and launch are NOT confirmed. No commit/push.
+
+## Local preview inertia review
+
+- User requests local changes only, show motion before any new commit/push. Baseline main remains b9f37c1. No renderer/material/resource edits.
+- Preview horizontal releases immediately coast in the latest stroke direction to a complete front-facing turn. Filtered timestamped finger velocity determines bounded strength; a strong flick adds one turn. Maximum free angular speed2.8rad/s, cubic integrated deceleration, exact identity endpoint, no spring. New contact cancels at the presented pose. Two-finger return and25%-hidden downward dismissal retain existing behavior; Reduce Motion uses300ms return instead of revolutions.
+- CardPhysics deterministic checks PASS for gentle/strong, both directions, monotone slowdown, maximum speed, complete turns, exact front endpoint,30/120Hz, reversal, regrab and pinch takeover, plus the full existing physics and morph suites. Local Debug build and3/3 UI tests PASS: horizontal inertial return (gentle/strong opposite swipes), downward bounce/dismiss/reopen, two-finger coordinated return. Result /tmp/plata-inertia-review01.xcresult; log screen-task work/inertia-review01.log. Actual simulator video inspected at front/back/edge/intermediate/end poses;23s review clip outputs/card-preview-inertia-review.mp4. No device installation, commit or push. Subjective motion feel awaits user approval.
 
 Latest work: [Gallery performance](#gallery-performance--21-september-2026). User explicitly authorized publishing the current checkpoint to GitHub for testing. Known issues below are not claimed fixed; older no-push notes describe historical iterations.
 
