@@ -10,6 +10,12 @@ The five finishes' surface textures are estimated at 232–371 MiB including mip
 
 ## Reproducible diagnostics
 
+### Preview transition follow-up (24 September, local)
+
+Keep the full preview drawable size through the closing animation and shrink it once after completion, rather than resizing the render target with each animated layout. The hidden hit-test mesh now keeps the actual ID-1 ratio, with camera fit handling different layout slots. Pure pose/viewport changes skip material-coordinator updates. Copy visibility is independent of the card animation: it is hidden immediately and returns only after closing completes. No texture, lighting, render-resolution or animation-duration reduction.
+
+Release simulator, identical two-iteration warm preview-entry/exit test before/after: CPU instructions4,351,556→4,080,463kI (6.2% fewer); CPU time1.336→1.361s (not an improvement); reported peak process memory91,687→90,983kB. This is a small-sample workload measurement, not iPhone GPU/FPS evidence. Hitch metrics produced no samples. Full-size initial drawable allocation still occurs on first entry; do not claim that all device hitches are eliminated from these measurements. Physical review is required.
+
 Optional launch argument `--plata-plastic-diagnostics` logs `PlasticPerformance` counters. Without it, diagnostics are disabled. `testWarmPlasticColorsDoNotLoadOrRebuildResources` waits for all five finishes, switches through ten selections, and asserts that `coldPrepare`, `textureLoad`, `inkRasterization`, `meshBuild` and `loaderShown` do not increase. `atomicApply` must increase.
 
 Release simulator, Xcode 27.0 (27A266a), iPhone 17 Pro / iOS 26.5. Baseline and optimized sources built separately; identical eight-drag Plastic workload, two measured iterations after warmup:

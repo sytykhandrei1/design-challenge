@@ -22,6 +22,7 @@ struct MetalCard: View {
     var interactive: Bool
     var prepareForInteraction: Bool
     var quarterTurned = false
+    var expandsPreviewViewport = false
     var animatePreviewEntrance = false
     var onPreviewDrag: ((CardPreviewDragEvent) -> Void)? = nil
     var onPreviewZoomEnd: ((Double) -> Void)? = nil
@@ -33,6 +34,7 @@ struct MetalCard: View {
                 CardSceneRenderer(design: design, options: options, interactive: interactive,
                                   prepareForInteraction: prepareForInteraction,
                                   quarterTurned: quarterTurned, animatePreviewEntrance: animatePreviewEntrance,
+                                  expandsPreviewViewport: expandsPreviewViewport,
                                   onPreviewDrag: onPreviewDrag, onPreviewZoomEnd: onPreviewZoomEnd)
             } else {
                 Color.clear
@@ -54,13 +56,15 @@ private struct CardSceneRenderer: UIViewRepresentable {
     /// The gallery preview rotates the UIView by 90°. Setup keeps it horizontal.
     var quarterTurned = false
     var animatePreviewEntrance = false
+    var expandsPreviewViewport = false
     var onPreviewDrag: ((CardPreviewDragEvent) -> Void)? = nil
     /// Optional diagnostics: peak scale actually reached by a completed pinch.
     var onPreviewZoomEnd: ((Double) -> Void)? = nil
 
     func makeUIView(context: Context) -> MetalCardSurface { MetalCardSurface() }
     func updateUIView(_ view: MetalCardSurface, context: Context) {
-        view.configure(design: design, options: options, quarterTurned: quarterTurned)
+        view.configure(design: design, options: options, quarterTurned: quarterTurned,
+                       expandsPreviewViewport: expandsPreviewViewport)
         view.onPreviewDrag = onPreviewDrag
         view.onPreviewZoomEnd = onPreviewZoomEnd
         view.prepareForInteraction = prepareForInteraction
@@ -118,6 +122,7 @@ final class MetalCardSurface: UIView, UIGestureRecognizerDelegate {
     private var design = CardCatalog.all[0]
     private var faceOptions = CardFaceOptions()
     private var quarterTurned = false
+    private var expandsPreviewViewport = false
     private var frontImage: UIImage?
     private var backImage: UIImage?
     private var pbrGeneration = 0
@@ -174,17 +179,20 @@ final class MetalCardSurface: UIView, UIGestureRecognizerDelegate {
 
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 
-    func configure(design: CardDesign, options: CardFaceOptions, quarterTurned: Bool) {
+    func configure(design: CardDesign, options: CardFaceOptions, quarterTurned: Bool,
+                   expandsPreviewViewport: Bool = false) {
         let textureChanged = !configured || self.design != design || faceOptions != options
         let basisChanged = self.quarterTurned != quarterTurned
+        let viewportChanged = self.expandsPreviewViewport != expandsPreviewViewport
         // SwiftUI moves the card's container on every drag tick. Its material,
         // camera and proxy scene do not change with that screen-space movement.
-        guard textureChanged || basisChanged else { return }
+        guard textureChanged || basisChanged || viewportChanged else { return }
         let artworkChanged = !configured || self.design.assetName != design.assetName || faceOptions != options
         configured = true
         self.design = design
         faceOptions = options
         self.quarterTurned = quarterTurned
+        self.expandsPreviewViewport = expandsPreviewViewport
         if textureChanged {
             if !design.usesRealityKit, artworkChanged {
                 frontImage = CardTextureRenderer.front(named: design.assetName, options: options).preparingForDisplay()
@@ -220,7 +228,10 @@ final class MetalCardSurface: UIView, UIGestureRecognizerDelegate {
             updateVisibility()
             sceneView?.setNeedsDisplay()
         }
-        if basisChanged { layoutScene(); renderOrientation() }
+        if basisChanged || viewportChanged { layoutScene(); renderOrientation() }
+        // A preview/layout change never changes the finish. Avoid touching the
+        // resource coordinators or restarting appearance tasks during resizing.
+        guard textureChanged else { return }
         if let finish = design.metalFinish {
             prepareScene()
             prepareMetalScene(finish: finish)
@@ -429,7 +440,7 @@ final class MetalCardSurface: UIView, UIGestureRecognizerDelegate {
         // is recalibrated so the physical card's on-screen size does not change.
         let cardSide = hypot(bounds.width, bounds.height) * 1.08
         let windowSize = window?.bounds.size ?? .zero
-        let side = quarterTurned
+        let side = quarterTurned || expandsPreviewViewport
             ? max(cardSide, hypot(windowSize.width, windowSize.height) * 1.04)
             : cardSide
         let target = CGRect(x: (bounds.width - side) / 2, y: (bounds.height - side) / 2, width: side, height: side)
@@ -441,8 +452,12 @@ final class MetalCardSurface: UIView, UIGestureRecognizerDelegate {
         lastSize = bounds.size
         lastViewportSide = side
         let modelWidth: CGFloat = 100
-        let modelHeight = modelWidth * bounds.height / bounds.width
-        let halfFrustum = side / bounds.width * modelWidth / 2
+        let modelHeight = design.usesRealityKit
+            ? modelWidth * CGFloat(PlataMetalV1Geometry.height / PlataMetalV1Geometry.width)
+            : modelWidth * bounds.height / bounds.width
+        let fittedWidth = design.usesRealityKit
+            ? min(bounds.width, bounds.height * modelWidth / modelHeight) : bounds.width
+        let halfFrustum = side / fittedWidth * modelWidth / 2
         cameraNode.position = SCNVector3(0, 0, Float(halfFrustum / tan(14 * .pi / 180)) + 0.45)
         if design.usesRealityKit {
             // This exact rounded mesh is only a CPU hit-test proxy, never the
@@ -776,8 +791,7 @@ final class MetalCardSurface: UIView, UIGestureRecognizerDelegate {
         guard let view = activeView,
               bounds.width > 0, bounds.height > 0 else { return }
         // Preserve the actual ID-1 aspect ratio inside the Figma artwork slot.
-        let units = max(PlataMetalV1Geometry.width / 100,
-                        PlataMetalV1Geometry.height / Float(100 * bounds.height / bounds.width))
+        let units = PlataMetalV1Geometry.width / 100
         let card = design.plasticFinish != nil ? plasticCoordinator?.card
             : (design.digitalSkin != nil ? digitalCoordinator?.card : metalCoordinator?.card)
         guard let card else { return }

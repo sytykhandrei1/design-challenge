@@ -6,6 +6,9 @@ struct CardOrderingView: View {
     var kind: CardOrderKind = .physical
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var preview = false
+    @State private var galleryCopyVisible = true
+    @State private var previewViewportActive = false
+    @State private var previewTransitionGeneration = 0
     @State private var previewOffset: CGFloat = 0
     @State private var lastPreviewDragDistance: CGFloat = 0
     @State private var peakPreviewZoom: Double = 1
@@ -116,9 +119,10 @@ struct CardOrderingView: View {
                 ], startPoint: .leading, endPoint: UnitPoint(x: 1.0388, y: 0.5)))
                 .fixedSize()
                 .position(x: width / 2, y: galleryCenterY - referenceCardHeight / 2 - 29)
-                .opacity(preview ? 0 : 1)
+                .opacity(galleryCopyVisible ? 1 : 0)
+                .animation(nil, value: galleryCopyVisible)
                 .accessibilityIdentifier("galleryPreviewHint")
-                .accessibilityHidden(preview)
+                .accessibilityHidden(!galleryCopyVisible)
                 .allowsHitTesting(false)
 
                 VStack(spacing: 8) {
@@ -136,8 +140,9 @@ struct CardOrderingView: View {
                 .fixedSize()
                 .frame(width: width, alignment: .top)
                 .offset(y: galleryCenterY + referenceCardHeight / 2 + 12)
-                .opacity(preview ? 0 : 1)
-                .accessibilityHidden(preview)
+                .opacity(galleryCopyVisible ? 1 : 0)
+                .animation(nil, value: galleryCopyVisible)
+                .accessibilityHidden(!galleryCopyVisible)
                 .allowsHitTesting(false)
 
                 CardColorRail(category: category, selection: Binding(
@@ -181,6 +186,7 @@ struct CardOrderingView: View {
                           // and rebuild the plastic scene on every reversal.
                           interactive: preview && active, prepareForInteraction: true,
                           quarterTurned: preview && active,
+                          expandsPreviewViewport: previewViewportActive && active,
                           animatePreviewEntrance: !reduceMotion,
                           onPreviewDrag: preview && active ? { event in
                     handlePreviewDrag(event, cardHeight: item.design(finish: finishes[item, default: 0]).usesRealityKit
@@ -286,12 +292,34 @@ struct CardOrderingView: View {
         guard !preview else { return }
         if index != selected { select(index) }
         peakPreviewZoom = 1
+        previewTransitionGeneration += 1
+        var instant = Transaction()
+        instant.disablesAnimations = true
+        withTransaction(instant) {
+            galleryCopyVisible = false
+            previewViewportActive = true
+        }
         withAnimation(previewTransition) { preview = true }
     }
 
     private func closePreview() {
         selectionHaptic()
-        withAnimation(previewTransition) { previewOffset = 0; preview = false }
+        previewTransitionGeneration += 1
+        let generation = previewTransitionGeneration
+        withAnimation(previewTransition, completionCriteria: .removed) {
+            previewOffset = 0
+            preview = false
+        } completion: {
+            guard generation == previewTransitionGeneration, !preview else { return }
+            // Keep the drawable fixed throughout the closing animation. Shrink
+            // once afterwards, and only then bring gallery copy back.
+            var instant = Transaction()
+            instant.disablesAnimations = true
+            withTransaction(instant) {
+                previewViewportActive = false
+                galleryCopyVisible = true
+            }
+        }
     }
 
     private func handlePreviewDrag(_ event: CardPreviewDragEvent, cardHeight: CGFloat,

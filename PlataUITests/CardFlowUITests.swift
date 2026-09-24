@@ -197,6 +197,8 @@ final class CardFlowUITests: XCTestCase {
     func testNoCardShineAndPreviewEntranceSettles() {
         let app = launchCardSelection()
         let card = activeCard(in: app)
+        let hint = app.descendants(matching: .any).matching(identifier: "galleryPreviewHint").firstMatch
+        let description = app.descendants(matching: .any).matching(identifier: "galleryDescription").firstMatch
         Thread.sleep(forTimeInterval: 2)
         let resting = card.screenshot().pngRepresentation
         Thread.sleep(forTimeInterval: 1.3)
@@ -206,6 +208,8 @@ final class CardFlowUITests: XCTestCase {
         attach("soft-edge-plastic-gallery", app)
         card.tap()
         XCTAssertTrue(app.staticTexts["Card preview"].waitForExistence(timeout: 3))
+        XCTAssertFalse(hint.exists)
+        XCTAssertFalse(description.exists, "Copy must be absent throughout preview, not behind the card")
         Thread.sleep(forTimeInterval: 1.2)
         let front = card.screenshot().pngRepresentation
         Thread.sleep(forTimeInterval: 0.4)
@@ -213,6 +217,9 @@ final class CardFlowUITests: XCTestCase {
         attach("soft-edge-plastic-preview", app)
         app.buttons["Back to designs"].tap()
         XCTAssertTrue(waitForLabel(of: card, containing: "Plastic, type"))
+        XCTAssertTrue(hint.waitForExistence(timeout: 3))
+        XCTAssertTrue(description.waitForExistence(timeout: 3))
+        assertPhysicalWidth(in: app, card: card)
         card.swipeLeft()
         XCTAssertTrue(waitForLabel(of: card, containing: "Metal, type"))
         Thread.sleep(forTimeInterval: 2.2)
@@ -221,6 +228,11 @@ final class CardFlowUITests: XCTestCase {
         XCTAssertTrue(app.staticTexts["Card preview"].waitForExistence(timeout: 3))
         Thread.sleep(forTimeInterval: 0.9)
         attach("soft-edge-metal-preview", app)
+        XCTAssertFalse(description.exists)
+        app.buttons["Back to designs"].tap()
+        XCTAssertTrue(description.waitForExistence(timeout: 3))
+        XCTAssertTrue(waitForLabel(of: card, containing: "Metal, type"))
+        assertPhysicalWidth(in: app, card: card)
     }
 
     @MainActor

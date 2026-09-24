@@ -1,5 +1,13 @@
 # Current status — 24 September 2026
 
+## Preview transition performance — latest local iteration
+
+- Publication authorized after successful phone installation by the user's explicit “Заливай на гит”. Publishing this tested snapshot to main; earlier no-push notes below are historical. Device FPS improvement remains unconfirmed and is not implied by publication.
+
+- Baseline published checkpoint1691c7c. Split gallery copy visibility from the preview animation: hide hint/title/subtitle immediately, reveal only after closing animation completion, guard stale completions on reopen. Full-size preview render target retained during closing, resized down once at completion. Hit-test proxy uses the real fixed ID-1 ratio and a fitted camera, so changing view aspect no longer builds meshes. Basis/viewport-only updates bypass appearance coordinators. Original textures, material/light settings, resolution, duration and3D entrance unchanged.
+- Release simulator comparison, identical2-iteration warm open/close test: CPU instructions4,351,556→4,080,463kI (~6.2% lower), CPU time1.336→1.361s (no demonstrated CPU-time improvement), reported peak process memory91,687→90,983kB. XCTHitchMetric provided no samples; cannot infer FPS or zero hitches. Results /tmp/plata-preview-perf-before01.xcresult and after01.
+- Functional UI3/3 PASS (/tmp/plata-preview-layout01.xcresult): Digital colours/real width/zoom/dismiss, Plastic+Metal entrance/exit and hidden/restored copy, two-finger transform return. Actual intermediate video frames at46.5s entry and51.1s exit show no title/subtitle behind the moving card; original gallery layout restored. Review outputs/preview-transition-review.mp4 (7s). Signed device Release BUILD SUCCEEDED. User-approved installation and launch on iPhone And SUCCEEDED; work/preview-perf-device-install.json DB sequence3276 and preview-perf-device-launch.json. Physical-device FPS improvement still requires measurement/review; no zero-lag claim. No commit/push authorization for this iteration.
+
 ## Latest phone install and authorized publication
 
 - User explicitly requested installation and then publication (“Заливай на гит изменения”). Signed Release containing all current inertia/gallery changes BUILD SUCCEEDED, work/gallery-polish-device-release.log.
