@@ -1,5 +1,9 @@
 # Current status — 24 September 2026
 
+## Colour circles visibility — publication authorized
+
+- CardColorRail now shares galleryCopyVisible with the hint/title/subtitle: immediate hide before enlargement, restore only after closing completes, no inherited preview fade. Hit testing and accessibility follow the same state. Reuses existing completion/reopen guard; no new timers, resources or renderer changes. User requested minimal verification overhead; signed Release build and diff check PASS, no full UI rerun. No phone install. User explicitly authorized publishing this follow-up to main.
+
 ## Preview transition performance — latest local iteration
 
 - Publication authorized after successful phone installation by the user's explicit “Заливай на гит”. Publishing this tested snapshot to main; earlier no-push notes below are historical. Device FPS improvement remains unconfirmed and is not implied by publication.

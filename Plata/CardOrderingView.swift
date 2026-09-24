@@ -151,9 +151,10 @@ struct CardOrderingView: View {
                 ))
                 .frame(width: width, height: 64)
                 .offset(y: height - 160 - 32)
-                .opacity(preview ? 0 : 1)
-                .allowsHitTesting(!preview)
-                .accessibilityHidden(preview)
+                .opacity(galleryCopyVisible ? 1 : 0)
+                .animation(nil, value: galleryCopyVisible)
+                .allowsHitTesting(galleryCopyVisible)
+                .accessibilityHidden(!galleryCopyVisible)
 
             }
             .frame(width: width, height: viewportHeight, alignment: .topLeading)
