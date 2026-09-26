@@ -1,4 +1,18 @@
-# PLATA — материалы карты, v1
+# Runtime PBR resources — September 26, 2026
+
+This directory now retains only the exact 37 original image files used by
+`Scripts/install-pbr-materials.sh`, listed in `Scripts/pbr-inputs.xcfilelist`.
+Both standard and zoom tiers remain. No image was resized, recompressed or
+color-converted. Current RealityKit resources under `Plata/` are unchanged.
+
+Authoring-only sources, intermediate maps, alternative exports and verification
+renders were archived separately. They are not required to build or run the app.
+See [repository size and fidelity](../../Docs/repository-size.md).
+
+The original authoring documentation below describes the FULL archived package,
+not the runtime-only directory retained here.
+
+# PLATA — материалы карты, v1 (archived authoring package)
 
 Три варианта одного дизайна: `brushed-metal`, `matte-plastic`, `glossy-plastic`. Для каждого подготовлены front, back и отдельное edge. Все результаты находятся в этой папке; исходный iOS target, ассеты и поведение приложения не заменены. Коммитов и push нет.
 

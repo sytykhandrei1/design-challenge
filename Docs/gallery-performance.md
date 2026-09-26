@@ -37,6 +37,6 @@ Preview measurement before the final camera change: CPU 1.335 s baseline versus 
 4. For performance review, Edit Scheme → Run → Build Configuration **Release**, disable **Debug executable**, then run on the phone. Debugger/diagnostic instrumentation and simulator timings are not representative of shipping performance.
 5. Exercise all five Plastic colors in both directions, Plastic/Metal type reversals, all four Digital colors, repeated preview entry, pinch/rotate and downward dismissal. Test both cold launch and a warm gallery. Memory-pressure recovery may legitimately require a new resource preparation, but must never show an incomplete card or apply an obsolete selection.
 
-The PBR copy build phase resolves paths relative to `SRCROOT`. Large raw `CardMaterials/v1` authoring assets are retained; only the needed runtime subset is copied into the app bundle.
+The PBR copy build phase resolves paths relative to `SRCROOT`. `CardMaterials/v1` retains the exact runtime subset; unused authoring assets are preserved in a separate owner-held archive, not needed to build. See [repository size and fidelity](repository-size.md).
 
 Apple guidance used: [Reducing RealityKit CPU utilization](https://developer.apple.com/documentation/realitykit/reducing-cpu-utilization-in-your-realitykit-app), [RealityKit performance](https://developer.apple.com/documentation/realitykit/improving-the-performance-of-a-realitykit-app), [App responsiveness](https://developer.apple.com/documentation/xcode/improving-app-responsiveness).

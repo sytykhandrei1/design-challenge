@@ -1,4 +1,14 @@
-# Current status — 24 September 2026
+# Current status — 26 September 2026
+
+## Repository slimming — authorized, quality-preserving
+
+- User approved the cleanup and explicitly approved rewriting main history and publishing to the SAME GitHub URL. No unrelated branch changes.
+- Started from freshly fetched remote main 7b8e970; its entire tree equals the locally reviewed 3e2b5e3 tree. Original full history saved in a verified git bundle before any rewrite.
+- Removed only 333 authoring-only CardMaterials paths (869,483,331 bytes) from the isolated checkout. Complete material archive and extracted files are SHA-256 verified. Owner backup directory: `/Users/a.sytykh/Documents/Codex/plata-repository-slim-20260926.BnCIeT`; recovery instructions there in RECOVERY.md.
+- Original tracked content 999,206,554 bytes; retained original content 129,723,223 bytes plus small documentation/verification additions. No Swift, project settings, renderer, runtime resources, resolution, lighting or compression changes.
+- Fresh device Release build PASS. All179 baseline source/build/resource files match SHA-256. All74 raw bundled resources and compiled Assets.car match the previous device Release byte-for-byte.
+- Plastic five-finish gallery/preview UI test PASS. Digital/Metal reproduce the SAME three assertions in the unchanged baseline: Digital/Metal peak zoom reads1.0, and Metal stationary material screenshot is unchanged until movement. Cleaned run `/tmp/plata-slim-gallery-20260926.xcresult`; baseline `/tmp/plata-slim-baseline-20260926.xcresult`. Exported gallery/preview screenshots inspected. These tests must not be presented as fully passing. Details in Docs/repository-size.md.
+- No phone installation for this task. Application bundle size is intentionally unchanged: the reduction is in source distribution and Git history.
 
 ## Colour circles visibility — publication authorized
 

@@ -1,0 +1,718 @@
+{
+  "CardMaterials/v1/demo/brushed-metal/back/standard/basecolor.png": {
+    "bytes": 121184,
+    "sha256": "8243742d8a28812bf3dfd06ec053c16eb2841ec6d37a81bab763fcc1512d5bc3"
+  },
+  "CardMaterials/v1/demo/brushed-metal/back/standard/metalness.png": {
+    "bytes": 9006,
+    "sha256": "aaada9f05fde03e22e087541e685c5eaf9a3241e48f536698bbacdfe545c5fce"
+  },
+  "CardMaterials/v1/demo/brushed-metal/back/standard/normal-scenekit.png": {
+    "bytes": 1442883,
+    "sha256": "20de801002da83af69cddcaa8acfec6b13a4293890848e97b33ea0687bad3c1c"
+  },
+  "CardMaterials/v1/demo/brushed-metal/back/standard/roughness.png": {
+    "bytes": 1857487,
+    "sha256": "d4427830b564dddca3bd4690cd209d69acde2203eb7dc8c326c398798b483b58"
+  },
+  "CardMaterials/v1/demo/brushed-metal/back/zoom/basecolor.png": {
+    "bytes": 272558,
+    "sha256": "d6dcde281a79adf30582e76f05833358d2bf20d96156346625827a31dfeff826"
+  },
+  "CardMaterials/v1/demo/brushed-metal/back/zoom/metalness.png": {
+    "bytes": 28741,
+    "sha256": "2fb685aeef103ac6b33d0075dec629f8cca8ef34cd9ed0f11c3fd19fc49dfbea"
+  },
+  "CardMaterials/v1/demo/brushed-metal/back/zoom/normal-scenekit.png": {
+    "bytes": 6143248,
+    "sha256": "730d0a258390b189905cde76f4f4ba6315c3b635f9af68181018225d9a2d3edb"
+  },
+  "CardMaterials/v1/demo/brushed-metal/back/zoom/roughness.png": {
+    "bytes": 5349796,
+    "sha256": "505b77d93f14f6d5b93e3d2751f8bbaa82ce8fa611b93a905033c6f0557f1688"
+  },
+  "CardMaterials/v1/demo/brushed-metal/front/standard/basecolor.png": {
+    "bytes": 100033,
+    "sha256": "d0ce750c01fba1a5ef1b49872df0be0dc6fedda54eebf073844f33acb64b44d8"
+  },
+  "CardMaterials/v1/demo/brushed-metal/front/standard/metalness.png": {
+    "bytes": 16901,
+    "sha256": "da0d5c772b0ede75351d4f3a04d2034cf7b318e3e04e882ea30a30bd6de0f64e"
+  },
+  "CardMaterials/v1/demo/brushed-metal/front/standard/normal-scenekit.png": {
+    "bytes": 1786561,
+    "sha256": "c6cc78edfee4bbf8fba65f14e29215ed0869e72d15d114448a54340f5e74b111"
+  },
+  "CardMaterials/v1/demo/brushed-metal/front/standard/roughness.png": {
+    "bytes": 2446183,
+    "sha256": "6b9033d850a740cabbacfaf1fcd02f01b163cbd1c96debabfed31d46f634ef08"
+  },
+  "CardMaterials/v1/demo/brushed-metal/front/zoom/basecolor.png": {
+    "bytes": 246833,
+    "sha256": "6e48d2192c928073ed1f13f145199ab7cefe790da10d50205311429c17e1bea4"
+  },
+  "CardMaterials/v1/demo/brushed-metal/front/zoom/metalness.png": {
+    "bytes": 46192,
+    "sha256": "4d0ace4383714b23131e32d3fa6eb1fee6171039048405d1c9cbb1c26693dbab"
+  },
+  "CardMaterials/v1/demo/brushed-metal/front/zoom/normal-scenekit.png": {
+    "bytes": 7463121,
+    "sha256": "06104a7fed31ddf53c0ddc2366eb692d6175306708ad5d725b4ef0780a2f0321"
+  },
+  "CardMaterials/v1/demo/brushed-metal/front/zoom/roughness.png": {
+    "bytes": 7057381,
+    "sha256": "97685c627e1da2e3d00072d5b61b8687b47caf7a45d2cf362c4eb3a55efa1abc"
+  },
+  "CardMaterials/v1/materials/brushed-metal/back/standard/basecolor.png": {
+    "bytes": 36450,
+    "sha256": "4163c1b1b054008a9d8ec61cf539b7e6fe898c39ed8cbf5999f190b34861c486"
+  },
+  "CardMaterials/v1/materials/brushed-metal/back/standard/metalness.png": {
+    "bytes": 9006,
+    "sha256": "aaada9f05fde03e22e087541e685c5eaf9a3241e48f536698bbacdfe545c5fce"
+  },
+  "CardMaterials/v1/materials/brushed-metal/back/standard/normal-scenekit.png": {
+    "bytes": 1372774,
+    "sha256": "80c214f11522b6f06b23c5f6ddf397247ab8a898b6ed4365a1b6a3b0aae32d22"
+  },
+  "CardMaterials/v1/materials/brushed-metal/back/standard/roughness.png": {
+    "bytes": 1831124,
+    "sha256": "22057b5b9bc6acd93b1bfd78ddb2b617ddaf683ef31f4aa45632093b6ea8477b"
+  },
+  "CardMaterials/v1/materials/brushed-metal/back/zoom/basecolor.png": {
+    "bytes": 109334,
+    "sha256": "e72ce1363765449567dee2acc02200268d2d25061480a1152e4037698431e58a"
+  },
+  "CardMaterials/v1/materials/brushed-metal/back/zoom/metalness.png": {
+    "bytes": 28741,
+    "sha256": "2fb685aeef103ac6b33d0075dec629f8cca8ef34cd9ed0f11c3fd19fc49dfbea"
+  },
+  "CardMaterials/v1/materials/brushed-metal/back/zoom/normal-scenekit.png": {
+    "bytes": 6039376,
+    "sha256": "b7f9927da1134bba6a653c20fa6b003924df3db251e7a6460b44f207657769a3"
+  },
+  "CardMaterials/v1/materials/brushed-metal/back/zoom/roughness.png": {
+    "bytes": 5287295,
+    "sha256": "f9daaade8f2d4aaec1d04918b418fa9e8a708e6cbf12689de9c0d3b520b1c356"
+  },
+  "CardMaterials/v1/materials/brushed-metal/edge/basecolor.png": {
+    "bytes": 1032,
+    "sha256": "d95255351d160d2cc7af469add4d244db590c7419d56c99fcc406ddca1c19500"
+  },
+  "CardMaterials/v1/materials/brushed-metal/edge/metalness.png": {
+    "bytes": 408,
+    "sha256": "660e54474e4aeacb95bb189246db19fe442a1ad177fa41542868ff0824697999"
+  },
+  "CardMaterials/v1/materials/brushed-metal/edge/normal-scenekit.png": {
+    "bytes": 1935,
+    "sha256": "ac50403f2cd441bb00a6f25e4aa77f34723c829c60721d11644aad0e58136085"
+  },
+  "CardMaterials/v1/materials/brushed-metal/edge/roughness.png": {
+    "bytes": 409,
+    "sha256": "8b977e8d394baa855dd882478b51654251ce284072805d3e2e08fecddc59b9ac"
+  },
+  "CardMaterials/v1/materials/brushed-metal/front/standard/basecolor.png": {
+    "bytes": 80186,
+    "sha256": "ab2122f559fc57d51d46a18331c4c05a9f2984c65b99b06e4e9bced96ded2d6f"
+  },
+  "CardMaterials/v1/materials/brushed-metal/front/standard/metalness.png": {
+    "bytes": 16901,
+    "sha256": "da0d5c772b0ede75351d4f3a04d2034cf7b318e3e04e882ea30a30bd6de0f64e"
+  },
+  "CardMaterials/v1/materials/brushed-metal/front/standard/normal-scenekit.png": {
+    "bytes": 1756368,
+    "sha256": "4e994ec7466d7f6f8d42553438bc862db4d1077f36844796acf5942651c096e1"
+  },
+  "CardMaterials/v1/materials/brushed-metal/front/standard/roughness.png": {
+    "bytes": 2436940,
+    "sha256": "1d59179ce5d535e27c253e9a995fd1b5dab5142d31b546725ec30f7163835ef4"
+  },
+  "CardMaterials/v1/materials/brushed-metal/front/zoom/basecolor.png": {
+    "bytes": 207809,
+    "sha256": "70b65c3ee29cb4e089e7873415a3bb866c9ba60f0e710d0bb32ff6d250440563"
+  },
+  "CardMaterials/v1/materials/brushed-metal/front/zoom/metalness.png": {
+    "bytes": 46192,
+    "sha256": "4d0ace4383714b23131e32d3fa6eb1fee6171039048405d1c9cbb1c26693dbab"
+  },
+  "CardMaterials/v1/materials/brushed-metal/front/zoom/normal-scenekit.png": {
+    "bytes": 7408963,
+    "sha256": "03c082fa7a847e5fdb1a5355f341d06e9e0c7d167196d387269c9ec25b5e2ebe"
+  },
+  "CardMaterials/v1/materials/brushed-metal/front/zoom/roughness.png": {
+    "bytes": 7026982,
+    "sha256": "94668347aefef15499a0e794af6cb313febfcc08b6d1b05bf9ceffc3f8a39553"
+  },
+  "CardMaterials/v1/viewer/studio-environment.png": {
+    "bytes": 51839,
+    "sha256": "ac4336be884c887240eb0e6ed4cccf63af4abe004cfb4afd3f7390866d634c07"
+  },
+  "Plata.xcodeproj/project.pbxproj": {
+    "bytes": 29038,
+    "sha256": "f040b4f1951de351af22ae14dc2f0d26291d43a8f0d0c70b0a96815547ea1d6f"
+  },
+  "Plata.xcodeproj/xcshareddata/xcschemes/Plata.xcscheme": {
+    "bytes": 3250,
+    "sha256": "49bc58127624c4b26210a10ac1e479a8a69c1788a6dd3e122279e788253b439d"
+  },
+  "Plata/AccountDates.swift": {
+    "bytes": 837,
+    "sha256": "e1ad19c8a4cbe23af8a51c066d8cb0f9fa5f5e0a4678e18c1fce9a76dedcc801"
+  },
+  "Plata/AccountView.swift": {
+    "bytes": 13177,
+    "sha256": "912d106672c216e3060aa675744797881748138f5d5af8977946738a4a011d84"
+  },
+  "Plata/Assets.xcassets/AccentColor.colorset/Contents.json": {
+    "bytes": 326,
+    "sha256": "3edac3f77f4fe39a2845d56c32acf8d9ffc5e04548fe8c3a924d607f8cae7017"
+  },
+  "Plata/Assets.xcassets/AccountCardText.colorset/Contents.json": {
+    "bytes": 341,
+    "sha256": "e9a6889057fea14dac0f9588ac60a3c2ec3d37da4a93b84edaafbec0f4187e90"
+  },
+  "Plata/Assets.xcassets/AccountDetails.colorset/Contents.json": {
+    "bytes": 341,
+    "sha256": "d6db7085c27dc1c8666281559601e053d6760f66da128bf5a3cdc50b62c91499"
+  },
+  "Plata/Assets.xcassets/AccountNeutral.colorset/Contents.json": {
+    "bytes": 341,
+    "sha256": "e9f378a533d50f5ad04efc717d5a826204f5464c48db034fda81df5f35d3ec99"
+  },
+  "Plata/Assets.xcassets/AccountPaymentAccent.colorset/Contents.json": {
+    "bytes": 341,
+    "sha256": "ca0115302d29d419f77c6e4ed46e120c12807ecd97e01466eb11e808d537482d"
+  },
+  "Plata/Assets.xcassets/AccountTextPrimary.colorset/Contents.json": {
+    "bytes": 341,
+    "sha256": "b82c052dcbb1197f983e2492f7b7ce38c2409a35d23ef428bc64228970f4945b"
+  },
+  "Plata/Assets.xcassets/AccountTextSecondary.colorset/Contents.json": {
+    "bytes": 341,
+    "sha256": "51cb5f39fc91cbb908dbcc3708e85a063de6c4172a5ff57da2f6bd29ba567d6c"
+  },
+  "Plata/Assets.xcassets/AccountWithdraw.colorset/Contents.json": {
+    "bytes": 341,
+    "sha256": "1950daa25e39b6ea80498a6b6c974d7be455bd456a1e76141c060a78de7be2ef"
+  },
+  "Plata/Assets.xcassets/CardTitle.colorset/Contents.json": {
+    "bytes": 311,
+    "sha256": "56536764e36b5d4dcdd1b646d369887bffbd25bd11107d103421986ba598b3b9"
+  },
+  "Plata/Assets.xcassets/Contents.json": {
+    "bytes": 60,
+    "sha256": "f5fb0e1f3a8142892ed092efb5955c1c2cc537003a89ad7bbdb9dade7fe8985f"
+  },
+  "Plata/Assets.xcassets/ModalBackground.colorset/Contents.json": {
+    "bytes": 356,
+    "sha256": "a57d6cdb9714e025ffccba4f15e6db62e558102d1ee1bf7fe0bbc29e3e797be4"
+  },
+  "Plata/Assets.xcassets/SetupBadge.colorset/Contents.json": {
+    "bytes": 356,
+    "sha256": "535d7a09645f7426c2a399d1f1642e0e18b2b96251f4ce60025444c00f6cad36"
+  },
+  "Plata/Assets.xcassets/account-balance-chevron.imageset/Contents.json": {
+    "bytes": 255,
+    "sha256": "47ec2ea78d2ecb29a0959159d421d4942ef30b38b71d993e9e2ff29306baa1f0"
+  },
+  "Plata/Assets.xcassets/account-balance-chevron.imageset/account-balance-chevron.png": {
+    "bytes": 799,
+    "sha256": "8187ea4e14e77b16b8316da019fefd71b18a2a56584b1784c0bb3732463cc842"
+  },
+  "Plata/Assets.xcassets/account-bill-pay.imageset/Contents.json": {
+    "bytes": 248,
+    "sha256": "822c2062ee1e1705f9b53144bd598873957ba0cece64dc994621aaf796e2801f"
+  },
+  "Plata/Assets.xcassets/account-bill-pay.imageset/account-bill-pay.png": {
+    "bytes": 2977,
+    "sha256": "2891e24248746a0e33f7f435802cb593fc6ae27818a2ffa7a64131086ae171d2"
+  },
+  "Plata/Assets.xcassets/account-card-add.imageset/Contents.json": {
+    "bytes": 248,
+    "sha256": "5a6fd5045a0ebcca713e6fe029010b6721d4c1be7dd38bcca5253083ee717429"
+  },
+  "Plata/Assets.xcassets/account-card-add.imageset/account-card-add.png": {
+    "bytes": 3371,
+    "sha256": "37a72c062eb538ac5e3ec276ff251368042404478cddbb273efead9d7764bb7d"
+  },
+  "Plata/Assets.xcassets/account-card-digital.imageset/Contents.json": {
+    "bytes": 252,
+    "sha256": "9e94862ab2462f1685138566cd94fccc6b6471975a7f05518eb436cc947dcecd"
+  },
+  "Plata/Assets.xcassets/account-card-digital.imageset/account-card-digital.png": {
+    "bytes": 32489,
+    "sha256": "fe509b06ad8edda809415338789b31a5589c899412d61e5d9958caaf4d410d98"
+  },
+  "Plata/Assets.xcassets/account-card-physical.imageset/Contents.json": {
+    "bytes": 253,
+    "sha256": "cceff9a210b765d40a835d9b5316df77ef52bedd177b5264977c48ce5424ed8c"
+  },
+  "Plata/Assets.xcassets/account-card-physical.imageset/account-card-physical.png": {
+    "bytes": 28222,
+    "sha256": "2b38d3d639096a8a64d1643636e49c8600a7ddd182bad09a7df175198b2c5b10"
+  },
+  "Plata/Assets.xcassets/account-chevron.imageset/Contents.json": {
+    "bytes": 247,
+    "sha256": "65658ed9f773370065b2c6da759a6067bbc43cf8a4d9e4b88627ac753961a13b"
+  },
+  "Plata/Assets.xcassets/account-chevron.imageset/account-chevron.png": {
+    "bytes": 528,
+    "sha256": "015859c332b1a9af54e3e4d0113ad493bdf4b53300f848ab3979833fdbd74d0a"
+  },
+  "Plata/Assets.xcassets/account-copy.imageset/Contents.json": {
+    "bytes": 244,
+    "sha256": "4e193875f8d0417ace3d645ccef7a51aa7e8624fd06c7d7bd4d8699607f62291"
+  },
+  "Plata/Assets.xcassets/account-copy.imageset/account-copy.png": {
+    "bytes": 1139,
+    "sha256": "76110a80ffac78abab41ac909f868f6e823ae5ab9fb34884ffd962f70f163a5e"
+  },
+  "Plata/Assets.xcassets/account-deposit.imageset/Contents.json": {
+    "bytes": 247,
+    "sha256": "eeb83e66f51006b57e52d84c587c31b90762b5354db4ac780e2adc56e3ed2960"
+  },
+  "Plata/Assets.xcassets/account-deposit.imageset/account-deposit.png": {
+    "bytes": 4591,
+    "sha256": "d5601ac6aa60513f09447ed8ffd2bffcdb0091957c88968d052801faa4a0dd77"
+  },
+  "Plata/Assets.xcassets/account-share.imageset/Contents.json": {
+    "bytes": 245,
+    "sha256": "3e8a1e14f67b24c50769c89623006ddbd59b1af035436821d083d95d4719e6be"
+  },
+  "Plata/Assets.xcassets/account-share.imageset/account-share.png": {
+    "bytes": 1248,
+    "sha256": "d18ece5a779dbf165e9da5f06aba11c17542751e7fd9d5791ccf261577d25419"
+  },
+  "Plata/Assets.xcassets/account-tab-home.imageset/Contents.json": {
+    "bytes": 248,
+    "sha256": "5ca541d125ce03e0c63a69b788667c388b60902bae37cc2a5c5f676900663923"
+  },
+  "Plata/Assets.xcassets/account-tab-home.imageset/account-tab-home.png": {
+    "bytes": 955,
+    "sha256": "ba990363951b00db3ca7c28dc93b9e7776c394cf47a0d31f3136105ca36a1995"
+  },
+  "Plata/Assets.xcassets/account-tab-invest.imageset/Contents.json": {
+    "bytes": 250,
+    "sha256": "1c219c1f35ac9ce4106ae51ec41b0966702e88ef21a4643ab4c138b924e99bc8"
+  },
+  "Plata/Assets.xcassets/account-tab-invest.imageset/account-tab-invest.png": {
+    "bytes": 1483,
+    "sha256": "9a90cc324ea53effb27a911253e0399a885ac35bd0f05f12f248d0b3b158466d"
+  },
+  "Plata/Assets.xcassets/account-tab-invite.imageset/Contents.json": {
+    "bytes": 250,
+    "sha256": "e12cdc887517104e11af49cc2453b970340b77f1222d49c986c120da71097aa0"
+  },
+  "Plata/Assets.xcassets/account-tab-invite.imageset/account-tab-invite.png": {
+    "bytes": 3378,
+    "sha256": "6130e814b9100c8edea349dc9d8479bacf686157234362c96571243ab37635d4"
+  },
+  "Plata/Assets.xcassets/account-tab-pay.imageset/Contents.json": {
+    "bytes": 247,
+    "sha256": "e580b7e7cd4562ef222481c9b3c74a0f620dad64e46078490e88466441ff588b"
+  },
+  "Plata/Assets.xcassets/account-tab-pay.imageset/account-tab-pay.png": {
+    "bytes": 2417,
+    "sha256": "d1267cb66578a18e8adb12ad785915f9eb8d5c66d0b185107851fb0614aa8108"
+  },
+  "Plata/Assets.xcassets/account-tab-support.imageset/Contents.json": {
+    "bytes": 251,
+    "sha256": "6aaa7f68d86c0dda91569b4b2fe067978ba019a9a89cbdd9be9d5351a5829cbf"
+  },
+  "Plata/Assets.xcassets/account-tab-support.imageset/account-tab-support.png": {
+    "bytes": 1843,
+    "sha256": "dd3f48508bff3c3c317edc96663f9ebbcc8d793ab5ea9fd2c02b1d54ef9cf778"
+  },
+  "Plata/Assets.xcassets/account-transactions-sphere.imageset/Contents.json": {
+    "bytes": 259,
+    "sha256": "18373f266131f196d82619a6b1048cce13d41801f5f1157914a0689d42217ca7"
+  },
+  "Plata/Assets.xcassets/account-transactions-sphere.imageset/account-transactions-sphere.png": {
+    "bytes": 29563,
+    "sha256": "cf267e1db1d2fd0401e9918965872889cc61309d2752c21faf5b04400ce8b292"
+  },
+  "Plata/Assets.xcassets/account-transfer.imageset/Contents.json": {
+    "bytes": 248,
+    "sha256": "bba64658bf16c8af81d3016aa7f3cd9ec7e1451c12d3b327c8eab1f073a3fc7e"
+  },
+  "Plata/Assets.xcassets/account-transfer.imageset/account-transfer.png": {
+    "bytes": 4878,
+    "sha256": "e6bcf17f8776d9dd518ed0b0c3d813b12a65694b0f35494c5272e188db5df898"
+  },
+  "Plata/Assets.xcassets/account-withdraw.imageset/Contents.json": {
+    "bytes": 248,
+    "sha256": "22c78a1c54f510836655f87f31cc13ee0b20bebd1a2485aa22a8eac7a74ded2d"
+  },
+  "Plata/Assets.xcassets/account-withdraw.imageset/account-withdraw.png": {
+    "bytes": 2528,
+    "sha256": "48ad23a56752e590af174c4086a86cfc65a2001f910f9f7cd3e61fe9ff54c7a0"
+  },
+  "Plata/Assets.xcassets/colors-of-life-card.imageset/Contents.json": {
+    "bytes": 163,
+    "sha256": "aaf80201c0f92da43642dc72eb5a0416048e8fbf105fdb29846633960a9cef7d"
+  },
+  "Plata/Assets.xcassets/colors-of-life-card.imageset/colors-of-life-card.png": {
+    "bytes": 2398111,
+    "sha256": "3d934b7e6796897668cb460cf7e7dee31f70d313fa7e2f2dc922ca3dd194dfbe"
+  },
+  "Plata/Assets.xcassets/gallery-digital.imageset/Contents.json": {
+    "bytes": 222,
+    "sha256": "bc7319659bebe3e1b0286d225b9a446ce511ed9b9a79f6c336ac1f0365446460"
+  },
+  "Plata/Assets.xcassets/gallery-digital.imageset/gallery-digital.png": {
+    "bytes": 1680265,
+    "sha256": "aa0e81eb74935fb360f139a36dd3cf899b475f5f447c5afe8573162259e795d0"
+  },
+  "Plata/Assets.xcassets/gallery-metal.imageset/Contents.json": {
+    "bytes": 220,
+    "sha256": "5708004cd9432d8976209bba030e75cc413f30b7ab7d13ca7d402d9f9f7fa334"
+  },
+  "Plata/Assets.xcassets/gallery-metal.imageset/gallery-metal.png": {
+    "bytes": 1736495,
+    "sha256": "3663b349f576cbd1815d2116bee0ff19fa2f0334eceefcf8037b1ffe62d9a436"
+  },
+  "Plata/Assets.xcassets/gallery-plastic.imageset/Contents.json": {
+    "bytes": 222,
+    "sha256": "322808c843621de2937b7d1dcb36c6bb2b134c43a0928f985b6433f92377231c"
+  },
+  "Plata/Assets.xcassets/gallery-plastic.imageset/gallery-plastic.png": {
+    "bytes": 1881070,
+    "sha256": "eb8b08bea575a81e20e6f864aaec99b4edef4a93fb4b6cf4eea3223a8d779377"
+  },
+  "Plata/Assets.xcassets/gallery-plata-plus.imageset/Contents.json": {
+    "bytes": 224,
+    "sha256": "dfaaef3b94440907b35439ecf0f14413e42a2fcf834466c7e8ff889a9735b3a1"
+  },
+  "Plata/Assets.xcassets/gallery-plata-plus.imageset/gallery-plata-plus.svg": {
+    "bytes": 1491,
+    "sha256": "6eefcc1b569c1353b5f60cf76746b7bfd6916f7ce593c81fd07ee33e63d5e9ba"
+  },
+  "Plata/Assets.xcassets/hola-platacard-back.imageset/Contents.json": {
+    "bytes": 125,
+    "sha256": "f9d2c3264a2970b03fc705c6b2c8eba0f6283391b766c8ac90cc456af0b204cc"
+  },
+  "Plata/Assets.xcassets/hola-platacard-back.imageset/hola-platacard-back.png": {
+    "bytes": 2498758,
+    "sha256": "75784a44ca0dd3bee3a59b6daba6624cc8ebe41b270d4f6d2ca428955b428fdd"
+  },
+  "Plata/Assets.xcassets/hola-platacard.imageset/Contents.json": {
+    "bytes": 158,
+    "sha256": "3c3f8ebe3935a49c46a7a0067b3c3272752bfaf6c12da921083c0a71bfcf7057"
+  },
+  "Plata/Assets.xcassets/hola-platacard.imageset/hola-platacard.png": {
+    "bytes": 1080313,
+    "sha256": "3c29d6b252dbe8faa3c266247c5d9708f0da6fe3f8b2ceba9ffc9375acca9a8a"
+  },
+  "Plata/Assets.xcassets/order-add-person.imageset/Contents.json": {
+    "bytes": 248,
+    "sha256": "3c8895809efff29a5b91e8362a59d1a7146edd54737ce40e6ba10c40a31ed09e"
+  },
+  "Plata/Assets.xcassets/order-add-person.imageset/order-add-person.png": {
+    "bytes": 1892,
+    "sha256": "d2b9775ec209b9924e3395ec4de37f944fde7575357b5a9141ccb716cc710a6d"
+  },
+  "Plata/Assets.xcassets/order-avatar.imageset/Contents.json": {
+    "bytes": 244,
+    "sha256": "e8a3db87c399be8d9fcb9504a07258c033f6dcae187e18cff752c261bfbf4dc5"
+  },
+  "Plata/Assets.xcassets/order-avatar.imageset/order-avatar.png": {
+    "bytes": 20897,
+    "sha256": "24e2afbb41b21e01e3a0baef82a3bef6fc14b16c0babab5db6ee19dfbfdfe021"
+  },
+  "Plata/Assets.xcassets/pbr-brushed-metal-back-clean.imageset/Contents.json": {
+    "bytes": 172,
+    "sha256": "ee5c637061b98ca12398edff3d22af4b7abb97aed07896317f6f48d7a740563f"
+  },
+  "Plata/Assets.xcassets/pbr-brushed-metal-back-clean.imageset/pbr-brushed-metal-back-clean.png": {
+    "bytes": 12866,
+    "sha256": "fd19c39ff4359e230c129f8113c0b9cdd295443d2675686bfa38281612078205"
+  },
+  "Plata/Assets.xcassets/pbr-brushed-metal-back-demo.imageset/Contents.json": {
+    "bytes": 171,
+    "sha256": "a80cc491926e76cebf669fca17fc94edab87d6a38af37961f5e1b498a8988e0f"
+  },
+  "Plata/Assets.xcassets/pbr-brushed-metal-back-demo.imageset/pbr-brushed-metal-back-demo.png": {
+    "bytes": 50192,
+    "sha256": "b072571166e0e75d7808f518dc6f879efb27694ba2d632e11b661597294f86ed"
+  },
+  "Plata/Assets.xcassets/pbr-brushed-metal-front-clean.imageset/Contents.json": {
+    "bytes": 173,
+    "sha256": "1d311dca287b285073727f54ec15bccb44d8357e84508b0d32bf73b311a79434"
+  },
+  "Plata/Assets.xcassets/pbr-brushed-metal-front-clean.imageset/pbr-brushed-metal-front-clean.png": {
+    "bytes": 44821,
+    "sha256": "ae3c2283c4a1ac8709ce3dbf7578c32c9616d07f147eb46f598102f2eed195c8"
+  },
+  "Plata/Assets.xcassets/pbr-brushed-metal-front-demo.imageset/Contents.json": {
+    "bytes": 172,
+    "sha256": "82a3856f62875c2e9c8e0dd49e0902e08a3a3e9b1700d346efc6b7a042fb2f04"
+  },
+  "Plata/Assets.xcassets/pbr-brushed-metal-front-demo.imageset/pbr-brushed-metal-front-demo.png": {
+    "bytes": 52967,
+    "sha256": "1d841beb5aca6b4706d92cb17b90266aa292f0d51284366ca8ee0b47c950388c"
+  },
+  "Plata/Assets.xcassets/pinklovers-card.imageset/Contents.json": {
+    "bytes": 159,
+    "sha256": "70096953c52d2707ef666b9f376a65c4e8843bfa98a2f195aa52cf4247d0fbed"
+  },
+  "Plata/Assets.xcassets/pinklovers-card.imageset/pinklovers-card.png": {
+    "bytes": 2563113,
+    "sha256": "e520f6b6137eb557407652c6b49ac26875c76bf59b868dc02a9ff5c38e60bcb6"
+  },
+  "Plata/Assets.xcassets/settings.imageset/Contents.json": {
+    "bytes": 152,
+    "sha256": "7656a4e07337925601de15f314d76b75b2262aacd5e4dcb9b70affe2a43a9bc4"
+  },
+  "Plata/Assets.xcassets/settings.imageset/settings.png": {
+    "bytes": 611,
+    "sha256": "d067d544bca898d8339294f82a67c9854ed4205064ac0216ff85d36f38d6fa89"
+  },
+  "Plata/CardDesign.swift": {
+    "bytes": 14718,
+    "sha256": "c92f534ed1e4345ec500e01848e8f4dbb612ef8c428118c062ffb11d1b5b55bc"
+  },
+  "Plata/CardOrderSheet.swift": {
+    "bytes": 10577,
+    "sha256": "317bb95748c82858820411dca2df85a67f37231f4c89cafc7ed057ef5da6340a"
+  },
+  "Plata/CardOrderingView.swift": {
+    "bytes": 34679,
+    "sha256": "576f4cc42134cf69e563f29824f63ef4a5e74cb63a659ac2abf71cb0a20fe9dd"
+  },
+  "Plata/CardPhysics.swift": {
+    "bytes": 19499,
+    "sha256": "a101f13590f4057186a5d41aa767a990b46f070ab8881377537fe6f395a1e03f"
+  },
+  "Plata/CardSetupFlow.swift": {
+    "bytes": 15207,
+    "sha256": "d0248d32283fd4b08840350bad5d5e6a237381732680338ae56143b786e2947b"
+  },
+  "Plata/MetalCard.swift": {
+    "bytes": 58523,
+    "sha256": "13aec651fd02b4e16774c27ac98cbda3e323704ac422079913fc1640099ed4d0"
+  },
+  "Plata/MorphSettingsView.swift": {
+    "bytes": 4655,
+    "sha256": "cd17e931d38523e1bfbc7b1e16ca69b6e962d43fea20ab0c684a27d8293eda67"
+  },
+  "Plata/MorphingTitle.swift": {
+    "bytes": 16250,
+    "sha256": "f110638760034a2700d0887425bff2197f6c7528f1baf7b4948c729b3c46e346"
+  },
+  "Plata/PlataApp.swift": {
+    "bytes": 4572,
+    "sha256": "5eebb892799b3a3f9ba14911efa20071faae5a2d630eaec95b82aad691d8a580"
+  },
+  "Plata/PlataDigitalV1/PlataDigitalArtwork.swift": {
+    "bytes": 19732,
+    "sha256": "ce8667f732350442cb603b3d92d28526142dafcd306634c287a91d8bdfa58647"
+  },
+  "Plata/PlataDigitalV1/PlataDigitalCardDemoView.swift": {
+    "bytes": 3226,
+    "sha256": "b07ce52c2e956d7c54c5476be0f3d10e44ee12a9b102c9720f66601534b02ab0"
+  },
+  "Plata/PlataDigitalV1/PlataDigitalCardMaterial.swift": {
+    "bytes": 13827,
+    "sha256": "2fb7abac38785271a51c00e179fedde2a19d33dd20141fcec3aec46928b092ec"
+  },
+  "Plata/PlataDigitalV1/PlataDigitalCardView.swift": {
+    "bytes": 8667,
+    "sha256": "79c8563a1e1deb8ca7fecefe4c71f392a8d81a41609711ac54aa08f6a5014f1b"
+  },
+  "Plata/PlataMetalV1/PlataMetalCardDemoView.swift": {
+    "bytes": 3328,
+    "sha256": "4b7d015c2b83f208697e6df475afed918d6f2a6a4415516722f20304d788468e"
+  },
+  "Plata/PlataMetalV1/PlataMetalCardGeometry.swift": {
+    "bytes": 3587,
+    "sha256": "98324b193e409ee6010db1d9561dd0eb987a5bf95f6a6716c6f696bcf3f98a50"
+  },
+  "Plata/PlataMetalV1/PlataMetalCardView.swift": {
+    "bytes": 21066,
+    "sha256": "9417c7bb901a7ff80f25c96b2bea6c8b1fc2f1ec46638cc04dcd3ba708118483"
+  },
+  "Plata/PlataMetalV1/Resources/plata_metal_v1/alex_smith_manifest.json": {
+    "bytes": 1191,
+    "sha256": "fdf388b3d3c1ecff39500c8f1cc6b6ec61cb7acb1b08df53bba9d5cbb2f268c2"
+  },
+  "Plata/PlataMetalV1/Resources/plata_metal_v1/back_basecolor.png": {
+    "bytes": 436259,
+    "sha256": "505577b8136887384c89f6d430d1faa2a10d007315717ad910876f8d2bdbaaf3"
+  },
+  "Plata/PlataMetalV1/Resources/plata_metal_v1/back_metalness_rgb.png": {
+    "bytes": 10421,
+    "sha256": "730130139dd50f48e13cc29d7c6a898c9f00e892f3e71c0879262a0cf62d3c75"
+  },
+  "Plata/PlataMetalV1/Resources/plata_metal_v1/back_normal_opengl.png": {
+    "bytes": 963194,
+    "sha256": "951110e23c421df149efb2beb82eada1a174264ce8fd05846721300c4e2a9c3f"
+  },
+  "Plata/PlataMetalV1/Resources/plata_metal_v1/back_roughness_rgb.png": {
+    "bytes": 892337,
+    "sha256": "209aeda9c8d6183d96b086f8921e7377f9685192df69d19572fa39d6f4c90229"
+  },
+  "Plata/PlataMetalV1/Resources/plata_metal_v1/chip_basecolor_rgba.png": {
+    "bytes": 242611,
+    "sha256": "630089a7a81eea539a7361f757635ceb259dcd1bdd95d99d570098d17e4d9665"
+  },
+  "Plata/PlataMetalV1/Resources/plata_metal_v1/chip_metalness_rgb.png": {
+    "bytes": 4765,
+    "sha256": "ac7e7f28c058d25431baff8a910ec9160a1a1fa1bd60589f716ab00b1e4ba3c0"
+  },
+  "Plata/PlataMetalV1/Resources/plata_metal_v1/chip_normal_opengl.png": {
+    "bytes": 559947,
+    "sha256": "72d0cff41f9106484477ac0b76a771e900d92840fb4ef972c2a4c16f08971179"
+  },
+  "Plata/PlataMetalV1/Resources/plata_metal_v1/chip_roughness_rgb.png": {
+    "bytes": 334770,
+    "sha256": "705c719c5174a32c1a593e27ad79f507e1fabb7ca08bc106bbc4d76d39252030"
+  },
+  "Plata/PlataMetalV1/Resources/plata_metal_v1/front_alex_smith_basecolor.png": {
+    "bytes": 459400,
+    "sha256": "daea4b1cc8bcd1e2680d59c3a64c1ef570b74db86c4c43e0e508ac3b20f82608"
+  },
+  "Plata/PlataMetalV1/Resources/plata_metal_v1/front_alex_smith_metalness_rgb.png": {
+    "bytes": 10037,
+    "sha256": "ed88edc54bb7ab948d1ddd065e91f20ac5b823d37dd8d183f4acb6c62dada0da"
+  },
+  "Plata/PlataMetalV1/Resources/plata_metal_v1/front_alex_smith_normal_opengl.png": {
+    "bytes": 815278,
+    "sha256": "0db3b75046e0b6380abecf49001e39d97d884fd4a7a02df38f9bd4f42ec457d0"
+  },
+  "Plata/PlataMetalV1/Resources/plata_metal_v1/front_alex_smith_roughness_rgb.png": {
+    "bytes": 838359,
+    "sha256": "7406190be853b7bb713cffcfe027e91a56ce03b6e6b1624c0bf9de5d918c5cd7"
+  },
+  "Plata/PlataMetalV1/Resources/plata_metal_v1/front_basecolor.png": {
+    "bytes": 547487,
+    "sha256": "e28edfddc4e6aebf1baaf28445ea2eb009c3bf48aae0f5befd2c20ae5665ca1b"
+  },
+  "Plata/PlataMetalV1/Resources/plata_metal_v1/front_metalness_rgb.png": {
+    "bytes": 10746,
+    "sha256": "47b4e47e8f1644f1bc240a1fe989c741c56db7bdadc64a3a2932d68f4170fc29"
+  },
+  "Plata/PlataMetalV1/Resources/plata_metal_v1/front_normal_opengl.png": {
+    "bytes": 962809,
+    "sha256": "e4278682cc7a72761cc513d56e5ba33ac66172331636ef1d84fabf6bd2434ed7"
+  },
+  "Plata/PlataMetalV1/Resources/plata_metal_v1/front_roughness_rgb.png": {
+    "bytes": 1014402,
+    "sha256": "cd52440863e2261e88704920171b39ee68a74e52ca96400c2166cb7b3c51d022"
+  },
+  "Plata/PlataMetalV1/Resources/plata_metal_v1/plata_studio.hdr": {
+    "bytes": 2077133,
+    "sha256": "875e54c6030ea507b12794bd062b895af4d0ac5b75d9cf161ee1de2e0909a76a"
+  },
+  "Plata/PlataPlasticV1/PlataPlasticArtwork.swift": {
+    "bytes": 18516,
+    "sha256": "fdd55954b3e6ca0c9f2d10ad1db96d5ac653d3c044c85aa4719ede9abb184659"
+  },
+  "Plata/PlataPlasticV1/PlataPlasticCardDemoView.swift": {
+    "bytes": 5108,
+    "sha256": "f745f385e775021998284bdde655189015fb7effb72da34af73e4d97b132bad2"
+  },
+  "Plata/PlataPlasticV1/PlataPlasticCardMaterial.swift": {
+    "bytes": 29907,
+    "sha256": "56e9fb96e63f850561744dcf06821ab75bbb0f0046e5d7a257a8cf86cc3a2789"
+  },
+  "Plata/PlataPlasticV1/PlataPlasticCardView.swift": {
+    "bytes": 12442,
+    "sha256": "ab6acb15f6583f2b8459f1058196399b41c5ba8ab396fda6cc3e1cc6b97a5e9f"
+  },
+  "Plata/PlataPlasticV1/PlataPlasticGeometry.swift": {
+    "bytes": 3156,
+    "sha256": "078b99fafd46c35548bab1222a07505c0fd054990b2ee687216846a6a0d5634e"
+  },
+  "Plata/PlataPlasticV1/Resources/plata_plastic_v1/gloss_back_normal_opengl.png": {
+    "bytes": 2709244,
+    "sha256": "59e1286227c829a934ce5f01006ab3f23a46c78e45f5e479b32d3abd2be720fd"
+  },
+  "Plata/PlataPlasticV1/Resources/plata_plastic_v1/gloss_back_roughness.png": {
+    "bytes": 2294027,
+    "sha256": "087a95641c128cb2f9e668a845d1fed873d93a544fd691e3e3c9ea3781809de0"
+  },
+  "Plata/PlataPlasticV1/Resources/plata_plastic_v1/gloss_edge_normal_opengl.png": {
+    "bytes": 97564,
+    "sha256": "a1f20a256209ee36f5c9816abf73370f60c766b3332e2fae8d23c1807b77bfb2"
+  },
+  "Plata/PlataPlasticV1/Resources/plata_plastic_v1/gloss_edge_roughness.png": {
+    "bytes": 85554,
+    "sha256": "7856ebaf7aa6a80a3cada3fcd96f6ad2e8d409b68ad47a97e6895a2435179c8d"
+  },
+  "Plata/PlataPlasticV1/Resources/plata_plastic_v1/gloss_front_normal_opengl.png": {
+    "bytes": 2706077,
+    "sha256": "facf1ca045076015b7048e5c30c8d694e63ed647a3312e9cda3999379262d159"
+  },
+  "Plata/PlataPlasticV1/Resources/plata_plastic_v1/gloss_front_roughness.png": {
+    "bytes": 2292198,
+    "sha256": "cb70b5f8b1300aefce92fe22c09054a8897d119b69541a68fe00e826d0e14e65"
+  },
+  "Plata/PlataPlasticV1/Resources/plata_plastic_v1/manifest.json": {
+    "bytes": 4805,
+    "sha256": "003fb02cbe9547b7a649cfacc1169db3915d993d399711cbc4cc3e91d61f070c"
+  },
+  "Plata/PlataPlasticV1/Resources/plata_plastic_v1/matte_back_normal_opengl.png": {
+    "bytes": 5742118,
+    "sha256": "e683528b412ca4676c4cf96c9234c97843434cff4119b25d37fe1695ddf99cf5"
+  },
+  "Plata/PlataPlasticV1/Resources/plata_plastic_v1/matte_back_roughness.png": {
+    "bytes": 3547122,
+    "sha256": "46e330ad7fe1ae4c4d421b99ab3367e477639857425421e644349ee4b0f6649c"
+  },
+  "Plata/PlataPlasticV1/Resources/plata_plastic_v1/matte_edge_normal_opengl.png": {
+    "bytes": 256736,
+    "sha256": "41cfa029508f00f289ee8f67c095e6c8635dd5b5b8bd1c804141617e6185db20"
+  },
+  "Plata/PlataPlasticV1/Resources/plata_plastic_v1/matte_edge_roughness.png": {
+    "bytes": 144726,
+    "sha256": "7ad2f24e4fc82a22eddf0d6cf3c60c5333f7b2a980ff42531fe9929b3c6f9ccc"
+  },
+  "Plata/PlataPlasticV1/Resources/plata_plastic_v1/matte_front_normal_opengl.png": {
+    "bytes": 5743074,
+    "sha256": "c1987b7e6a23c44d4c92f7090c624f8308d90eacd58045fae18964a744d5254a"
+  },
+  "Plata/PlataPlasticV1/Resources/plata_plastic_v1/matte_front_roughness.png": {
+    "bytes": 3546923,
+    "sha256": "1aa48697e824c6bd8f3bca88cdd8e19855d6efb0c9ed0385f52711add80ab5e5"
+  },
+  "Plata/PlataPlasticV1/Resources/plata_plastic_v1/satin_back_normal_opengl.png": {
+    "bytes": 1702688,
+    "sha256": "5d5ee092742e8a83531d3d4d8b6be51e2fdef4ffcba984e554f618bb88d3e450"
+  },
+  "Plata/PlataPlasticV1/Resources/plata_plastic_v1/satin_back_roughness.png": {
+    "bytes": 1876579,
+    "sha256": "d04666a83ea8328f916cbb7ce73a9ab0fcc4bda7d802c3e1fa09e55e5926fcf9"
+  },
+  "Plata/PlataPlasticV1/Resources/plata_plastic_v1/satin_edge_normal_opengl.png": {
+    "bytes": 113086,
+    "sha256": "52dbd15a7348021b4cddd4f76b76ee69995bd3e2bc0f35b63c325146b9be8cb6"
+  },
+  "Plata/PlataPlasticV1/Resources/plata_plastic_v1/satin_edge_roughness.png": {
+    "bytes": 88320,
+    "sha256": "ca9c84963063372e2965d8adeb14299f91304299c8c0e7c76493f7056262d224"
+  },
+  "Plata/PlataPlasticV1/Resources/plata_plastic_v1/satin_front_normal_opengl.png": {
+    "bytes": 1702472,
+    "sha256": "2ab743756ead27a25bb769f47ae60c001d0b683c88b8eb021471c27318da06e1"
+  },
+  "Plata/PlataPlasticV1/Resources/plata_plastic_v1/satin_front_roughness.png": {
+    "bytes": 1874783,
+    "sha256": "6c748d9e9ea1fa56c666d328c2dcdae8c0d1b91cfdf653271ba1062eee8df1b3"
+  },
+  "Plata/TextMorph.swift": {
+    "bytes": 6107,
+    "sha256": "eae9b34381db7b72ad0c75d5a0a96838109b33d06632a71bdc22faad404a5631"
+  },
+  "Scripts/install-pbr-materials.sh": {
+    "bytes": 1537,
+    "sha256": "550971bb8ad42e0aace2baa3db848975e0ef890d2426210d9a3a2537ed7774c5"
+  },
+  "Scripts/pbr-inputs.xcfilelist": {
+    "bytes": 2872,
+    "sha256": "cd054e5c66b4df89ce7f2082f11a51260990385f8013b2ffeaf7ee3eb96e9f2e"
+  },
+  "Scripts/pbr-outputs.xcfilelist": {
+    "bytes": 6175,
+    "sha256": "618a540c6578d60f2e65f21600574964f03836d15d706c289cc88f10f6f46cf8"
+  }
+}
