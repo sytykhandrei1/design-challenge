@@ -9,6 +9,7 @@
 - Fresh device Release build PASS. All179 baseline source/build/resource files match SHA-256. All74 raw bundled resources and compiled Assets.car match the previous device Release byte-for-byte.
 - Plastic five-finish gallery/preview UI test PASS. Digital/Metal reproduce the SAME three assertions in the unchanged baseline: Digital/Metal peak zoom reads1.0, and Metal stationary material screenshot is unchanged until movement. Cleaned run `/tmp/plata-slim-gallery-20260926.xcresult`; baseline `/tmp/plata-slim-baseline-20260926.xcresult`. Exported gallery/preview screenshots inspected. These tests must not be presented as fully passing. Details in Docs/repository-size.md.
 - No phone installation for this task. Application bundle size is intentionally unchanged: the reduction is in source distribution and Git history.
+- History filter completed in isolated checkout; retained tree objects match for all13 mapped commits. Cleaned Git pack is106.09MiB before remote clone verification. Publication uses explicit lease on old remote main7b8e970; no other remote refs targeted.
 
 ## Colour circles visibility — publication authorized
 

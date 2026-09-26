@@ -44,6 +44,9 @@ Validation on September 26:
   Metal peak zoom reads 1.0 instead of >1.5. The original unmodified project
   reproduced all three assertions. No test or interaction code was changed.
   Do not describe this run as all UI tests passing or these issues as fixed.
+- After history filtering, every retained file's Git object and path were
+  compared for all 13 mapped commits: PASS. Only the explicit archived paths
+  were removed; retained historical application code/assets are unchanged.
 
 ## Preserved authoring material
 
