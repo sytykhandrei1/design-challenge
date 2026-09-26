@@ -1,5 +1,12 @@
 # Current status — 26 September 2026
 
+## Illustrated Digital backs — publication authorized
+
+- User approved adding the four shown illustrations, then requested installation and explicitly authorized GitHub publication (“заливай на гит”). Ordinary main push; no history rewrite.
+- Four raw PNGs (11,624,741 bytes) are copied unchanged; native-resolution decode and centered UV sampling exclude presentation margins. Fronts, geometry, lighting, Metal and Plastic remain unchanged.
+- Debug build and four-skin UI scenario PASS on iPhone16 Pro/iOS18.6; all four backs visually inspected. Signed device Release PASS, four bundled PNG hashes match originals. Installed on iPhone And, databaseSequence3580; launch attempts timed out, automatic launch not confirmed.
+- Checksum baseline deliberately revised for only three existing entries plus four new PNGs; other176 original entries unchanged. Verification PASS183; previous hashes recorded in Docs/digital-illustrated-backs.md. Existing zoom/Metal stationary-frame issues not fixed by this change.
+
 ## Repository slimming — authorized, quality-preserving
 
 - User approved the cleanup and explicitly approved rewriting main history and publishing to the SAME GitHub URL. No unrelated branch changes.

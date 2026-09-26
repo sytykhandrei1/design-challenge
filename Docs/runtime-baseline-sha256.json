@@ -148,8 +148,8 @@
     "sha256": "ac4336be884c887240eb0e6ed4cccf63af4abe004cfb4afd3f7390866d634c07"
   },
   "Plata.xcodeproj/project.pbxproj": {
-    "bytes": 29038,
-    "sha256": "f040b4f1951de351af22ae14dc2f0d26291d43a8f0d0c70b0a96815547ea1d6f"
+    "bytes": 29612,
+    "sha256": "c1ff9bd9c020d6a13cfc3ddca973b5fb3ba4166fc20d763a81c919c7fab4b8e4"
   },
   "Plata.xcodeproj/xcshareddata/xcschemes/Plata.xcscheme": {
     "bytes": 3250,
@@ -504,20 +504,36 @@
     "sha256": "5eebb892799b3a3f9ba14911efa20071faae5a2d630eaec95b82aad691d8a580"
   },
   "Plata/PlataDigitalV1/PlataDigitalArtwork.swift": {
-    "bytes": 19732,
-    "sha256": "ce8667f732350442cb603b3d92d28526142dafcd306634c287a91d8bdfa58647"
+    "bytes": 20451,
+    "sha256": "10d09a604969d6ad0d155bdeb09f6ce41311718be5ad47e757e9ade8a4520bf2"
   },
   "Plata/PlataDigitalV1/PlataDigitalCardDemoView.swift": {
     "bytes": 3226,
     "sha256": "b07ce52c2e956d7c54c5476be0f3d10e44ee12a9b102c9720f66601534b02ab0"
   },
   "Plata/PlataDigitalV1/PlataDigitalCardMaterial.swift": {
-    "bytes": 13827,
-    "sha256": "2fb7abac38785271a51c00e179fedde2a19d33dd20141fcec3aec46928b092ec"
+    "bytes": 14091,
+    "sha256": "25cea84d0016fb56a0873bdd8afe01612045eec92ae337f235ddb5bca493016b"
   },
   "Plata/PlataDigitalV1/PlataDigitalCardView.swift": {
     "bytes": 8667,
     "sha256": "79c8563a1e1deb8ca7fecefe4c71f392a8d81a41609711ac54aa08f6a5014f1b"
+  },
+  "Plata/PlataDigitalV1/Resources/plata_digital_v1/amanecer_back_illustration.png": {
+    "bytes": 2751600,
+    "sha256": "500f7149063f5991a1ce70fe27c39494ac064e2f342893e57f3f4c0d4877a790"
+  },
+  "Plata/PlataDigitalV1/Resources/plata_digital_v1/cenote_back_illustration.png": {
+    "bytes": 3206221,
+    "sha256": "87713230e80eef23c77bc9875b1a1e39ac4641ee12191054e2a5c50e377aabd0"
+  },
+  "Plata/PlataDigitalV1/Resources/plata_digital_v1/jacaranda_back_illustration.png": {
+    "bytes": 3409396,
+    "sha256": "ea3b6ae0a14c23617e463f611b274800053bbb6c3b2eeee212a4eb84f80249f9"
+  },
+  "Plata/PlataDigitalV1/Resources/plata_digital_v1/noche_back_illustration.png": {
+    "bytes": 2257524,
+    "sha256": "9475c654c16481f86f0ee11d814eb848e18eae13d488b42e0f42589f5770959c"
   },
   "Plata/PlataMetalV1/PlataMetalCardDemoView.swift": {
     "bytes": 3328,

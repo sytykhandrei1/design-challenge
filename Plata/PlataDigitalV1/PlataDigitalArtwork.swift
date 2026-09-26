@@ -1,4 +1,5 @@
 import UIKit
+import ImageIO
 
 /// Design decisions for the Digital row; the palette is artwork, not a baked reflection.
 enum PlataDigitalSkin: String, CaseIterable, Identifiable, Sendable {
@@ -18,6 +19,19 @@ enum PlataDigitalSkin: String, CaseIterable, Identifiable, Sendable {
     var frontInkColor: UIColor {
         self == .amanecer ? .digitalHex(0x101C36) : .white
     }
+    var backIllustrationFilename: String { "\(rawValue)_back_illustration.png" }
+
+    /// Centered aspect-fill inside the generated PNG's transparent presentation margin.
+    /// Original PNG pixels stay unchanged; the ID-1 mesh supplies the rounded silhouette.
+    var backIllustrationUVScale: SIMD2<Float> {
+        switch self {
+        case .amanecer: .init(0.988376661, 0.988733720)
+        case .jacaranda: .init(0.996733376, 0.996462382)
+        case .cenote: .init(0.946733376, 0.946475976)
+        case .noche: .init(0.890733376, 0.890491201)
+        }
+    }
+
     var edgeColor: UIColor {
         switch self {
         case .amanecer: .digitalHex(0x254665)
@@ -93,24 +107,27 @@ enum PlataDigitalArtwork {
         context.restoreGState()
     }
 
+    /// Decode at native resolution off the main actor through the appearance cache.
+    /// No generated mip/detail upscale, raster edits, or image-set processing.
+    private static func backIllustration(_ skin: PlataDigitalSkin) throws -> CGImage {
+        let filename = skin.backIllustrationFilename
+        let resource = "plata_digital_v1/\(filename)"
+        guard let url = Bundle.main.url(forResource: filename, withExtension: nil,
+                                        subdirectory: "plata_digital_v1"),
+              let source = CGImageSourceCreateWithURL(url as CFURL, nil),
+              let decoded = CGImageSourceCreateImageAtIndex(source, 0,
+                  [kCGImageSourceShouldCacheImmediately: true] as CFDictionary),
+              let space = CGColorSpace(name: CGColorSpace.sRGB),
+              let image = decoded.copy(colorSpace: space) else {
+            throw PlataDigitalError.resource(resource)
+        }
+        return image
+    }
+
     static func background(_ skin: PlataDigitalSkin, isBack: Bool = false) throws -> CGImage {
-        try image(backgroundSize, canvas: CGSize(width: 1000, height: 630.6), opaque: true,
+        if isBack { return try backIllustration(skin) }
+        return try image(backgroundSize, canvas: CGSize(width: 1000, height: 630.6), opaque: true,
                   label: "\(skin.rawValue)/background") { c, _ in
-            if isBack {
-                // The accepted quiet back is shared; only its palette follows the selected front.
-                let colors: [UInt32]
-                let accent: UInt32
-                switch skin {
-                case .amanecer: colors = [0x101C36, 0x172D48, 0x24374B]; accent = 0xBA5442
-                case .jacaranda: colors = [0x201536, 0x302147, 0x403057]; accent = 0xB070B5
-                case .cenote: colors = [0x0A252B, 0x12383D, 0x20494B]; accent = 0x529C85
-                case .noche: colors = [0x10142B, 0x181D36, 0x272C47]; accent = 0x666FAD
-                }
-                gradient(c, colors: colors, stops: [0, 0.62, 1],
-                         from: .init(x: 780, y: 0), to: .init(x: 80, y: 700))
-                glow(c, color: accent, alpha: 0.16, center: .init(x: -110, y: 760), radius: 540, squash: 0.75)
-                return
-            }
             switch skin {
             case .amanecer:
                 // Chromatic intermediate stops avoid the old grey/beige blend between orange and blue.

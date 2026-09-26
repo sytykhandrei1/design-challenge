@@ -37,6 +37,8 @@ obj(850,'isa = PBXFileReference; lastKnownFileType = folder; path = PlataMetalV1
 obj(851,f'isa = PBXBuildFile; fileRef = {uid(850)};')
 obj(860,'isa = PBXFileReference; lastKnownFileType = folder; path = PlataPlasticV1/Resources/plata_plastic_v1; sourceTree = "<group>";')
 obj(861,f'isa = PBXBuildFile; fileRef = {uid(860)};')
+obj(870,'isa = PBXFileReference; lastKnownFileType = folder; path = PlataDigitalV1/Resources/plata_digital_v1; sourceTree = "<group>";')
+obj(871,f'isa = PBXBuildFile; fileRef = {uid(870)};')
 obj(111,'isa = PBXFileReference; explicitFileType = wrapper.application; path = Plata.app; sourceTree = BUILT_PRODUCTS_DIR;')
 uitests=['CardFlowUITests.swift','AccountScreenUITests.swift','PlataMetalV1UITests.swift','PlataDigitalV1UITests.swift','PlataPlasticV1UITests.swift']
 for i,name in enumerate(uitests):
@@ -44,10 +46,10 @@ for i,name in enumerate(uitests):
  obj(212+2*i,f'isa = PBXBuildFile; fileRef = {uid(112+2*i)};')
 obj(113,'isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = PlataUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR;')
 obj(1,f'isa = PBXGroup; children = ({uid(2)}, {uid(4)}, {uid(3)}); sourceTree = "<group>";')
-obj(2,'isa = PBXGroup; path = Plata; sourceTree = "<group>"; children = ('+', '.join(uid(300+i) for i in range(len(sources)))+', '+uid(110)+', '+uid(850)+', '+uid(860)+');')
+obj(2,'isa = PBXGroup; path = Plata; sourceTree = "<group>"; children = ('+', '.join(uid(300+i) for i in range(len(sources)))+', '+uid(110)+', '+uid(850)+', '+uid(860)+', '+uid(870)+');')
 obj(3,f'isa = PBXGroup; name = Products; children = ({uid(111)}, {uid(113)}); sourceTree = "<group>";')
 obj(4,'isa = PBXGroup; path = PlataUITests; children = ('+', '.join(uid(112+2*i) for i in range(len(uitests)))+'); sourceTree = "<group>";')
-for n,isa,files in [(10,'PBXSourcesBuildPhase',[400+i for i in range(len(sources))]),(11,'PBXResourcesBuildPhase',[210,851,861]),(12,'PBXFrameworksBuildPhase',[]),(13,'PBXSourcesBuildPhase',[212+2*i for i in range(len(uitests))]),(14,'PBXResourcesBuildPhase',[]),(15,'PBXFrameworksBuildPhase',[])]:
+for n,isa,files in [(10,'PBXSourcesBuildPhase',[400+i for i in range(len(sources))]),(11,'PBXResourcesBuildPhase',[210,851,861,871]),(12,'PBXFrameworksBuildPhase',[]),(13,'PBXSourcesBuildPhase',[212+2*i for i in range(len(uitests))]),(14,'PBXResourcesBuildPhase',[]),(15,'PBXFrameworksBuildPhase',[])]:
  obj(n,f'isa = {isa}; buildActionMask = 2147483647; files = ('+', '.join(uid(f) for f in files)+'); runOnlyForDeploymentPostprocessing = 0;')
 obj(240,'isa = PBXShellScriptBuildPhase; alwaysOutOfDate = 1; buildActionMask = 2147483647; files = (); inputPaths = (); outputPaths = (); inputFileListPaths = ("$(SRCROOT)/Scripts/pbr-inputs.xcfilelist"); outputFileListPaths = ("$(SRCROOT)/Scripts/pbr-outputs.xcfilelist"); name = "Install brushed-metal PBR maps"; runOnlyForDeploymentPostprocessing = 0; shellPath = /bin/bash; shellScript = "\\\"${SRCROOT}/Scripts/install-pbr-materials.sh\\\"\\n";')
 obj(20,f'isa = PBXNativeTarget; buildConfigurationList = {uid(31)}; buildPhases = ({uid(10)}, {uid(12)}, {uid(11)}, {uid(240)}); buildRules = (); dependencies = (); name = Plata; productName = Plata; productReference = {uid(111)}; productType = "com.apple.product-type.application";')

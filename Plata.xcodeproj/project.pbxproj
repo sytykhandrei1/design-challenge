@@ -24,6 +24,7 @@
 		0000000000000000000000DB /* AccountDates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000077 /* AccountDates.swift */; };
 		000000000000000000000353 /* PlataMetalV1/Resources/plata_metal_v1 in Resources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000352 /* PlataMetalV1/Resources/plata_metal_v1 */; };
 		00000000000000000000035D /* PlataPlasticV1/Resources/plata_plastic_v1 in Resources */ = {isa = PBXBuildFile; fileRef = 00000000000000000000035C /* PlataPlasticV1/Resources/plata_plastic_v1 */; };
+		000000000000000000000367 /* PlataDigitalV1/Resources/plata_digital_v1 in Resources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000366 /* PlataDigitalV1/Resources/plata_digital_v1 */; };
 		00000000000000000000038E /* PlataMetalV1/PlataMetalCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000384 /* PlataMetalV1/PlataMetalCardView.swift */; };
 		00000000000000000000038F /* PlataMetalV1/PlataMetalCardGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000385 /* PlataMetalV1/PlataMetalCardGeometry.swift */; };
 		000000000000000000000390 /* PlataMetalV1/PlataMetalCardDemoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000386 /* PlataMetalV1/PlataMetalCardDemoView.swift */; };
@@ -71,6 +72,7 @@
 		000000000000000000000077 /* AccountDates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountDates.swift; sourceTree = "<group>"; };
 		000000000000000000000352 /* PlataMetalV1/Resources/plata_metal_v1 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = PlataMetalV1/Resources/plata_metal_v1; sourceTree = "<group>"; };
 		00000000000000000000035C /* PlataPlasticV1/Resources/plata_plastic_v1 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = PlataPlasticV1/Resources/plata_plastic_v1; sourceTree = "<group>"; };
+		000000000000000000000366 /* PlataDigitalV1/Resources/plata_digital_v1 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = PlataDigitalV1/Resources/plata_digital_v1; sourceTree = "<group>"; };
 		000000000000000000000384 /* PlataMetalV1/PlataMetalCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlataMetalV1/PlataMetalCardView.swift; sourceTree = "<group>"; };
 		000000000000000000000385 /* PlataMetalV1/PlataMetalCardGeometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlataMetalV1/PlataMetalCardGeometry.swift; sourceTree = "<group>"; };
 		000000000000000000000386 /* PlataMetalV1/PlataMetalCardDemoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlataMetalV1/PlataMetalCardDemoView.swift; sourceTree = "<group>"; };
@@ -142,6 +144,7 @@
 				00000000000000000000006E /* Assets.xcassets */,
 				000000000000000000000352 /* PlataMetalV1/Resources/plata_metal_v1 */,
 				00000000000000000000035C /* PlataPlasticV1/Resources/plata_plastic_v1 */,
+				000000000000000000000366 /* PlataDigitalV1/Resources/plata_digital_v1 */,
 				000000000000000000000386 /* PlataMetalV1/PlataMetalCardDemoView.swift */,
 				000000000000000000000385 /* PlataMetalV1/PlataMetalCardGeometry.swift */,
 				000000000000000000000384 /* PlataMetalV1/PlataMetalCardView.swift */,
@@ -245,6 +248,7 @@
 				0000000000000000000000D2 /* Assets.xcassets in Resources */,
 				000000000000000000000353 /* PlataMetalV1/Resources/plata_metal_v1 in Resources */,
 				00000000000000000000035D /* PlataPlasticV1/Resources/plata_plastic_v1 in Resources */,
+				000000000000000000000367 /* PlataDigitalV1/Resources/plata_digital_v1 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

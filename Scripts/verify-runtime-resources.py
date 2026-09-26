@@ -2,7 +2,8 @@
 """Verify byte identity of the renderer, build configuration and shipped assets.
 
 Run from any directory; no third-party dependencies or asset generation.
-The baseline was captured before the September 2026 authoring-only cleanup.
+The original baseline was captured before the September 2026 authoring-only cleanup.
+Intentional subsequent changes are recorded in Docs/digital-illustrated-backs.md.
 """
 import hashlib
 import json
@@ -19,4 +20,4 @@ for name, expected in manifest.items():
         failures.append(f"Changed: {name}")
 if failures:
     raise SystemExit("\n".join(failures))
-print(f"PASS: {len(manifest)} files match the pre-cleanup SHA-256 baseline")
+print(f"PASS: {len(manifest)} files match the documented SHA-256 baseline")

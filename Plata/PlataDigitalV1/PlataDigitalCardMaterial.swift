@@ -2,7 +2,7 @@ import RealityKit
 import UIKit
 import ImageIO
 
-/// Standard PBR only. The smooth, non-metallic light field has no bump or baked reflection.
+/// Standard non-metallic PBR. Front light fields and back illustrations share the existing coating.
 @MainActor
 enum PlataDigitalCardMaterial {
     typealias Geometry = PlataMetalV1Geometry
@@ -21,6 +21,11 @@ enum PlataDigitalCardMaterial {
         let map = try await texture(image, name: "\(skin.rawValue)-\(isBack ? "back" : "front")")
         var result = PhysicallyBasedMaterial()
         result.baseColor = .init(tint: .white, texture: .init(map))
+        if isBack {
+            let scale = skin.backIllustrationUVScale
+            result.textureCoordinateTransform = .init(offset: (SIMD2<Float>(repeating: 1) - scale) / 2,
+                                                       scale: scale)
+        }
         result.metallic = 0.0
         result.roughness = .init(floatLiteral: isBack ? 0.55 : 0.23)
         result.specular = .init(floatLiteral: isBack ? 0.16 : 0.32)
